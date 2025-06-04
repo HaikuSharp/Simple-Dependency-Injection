@@ -7,7 +7,7 @@ Simple-Dependency-Injection (SDI) - это легковесная библиот
 
 ```bash
 dotnet add package Simple-Dependency-Injection
-```.
+```
 
 ## Основные концепции
 
