@@ -1,6 +1,6 @@
 ﻿using SDI.Abstraction;
-using SDI.Accessors;
 using SDI.Exceptions;
+using SDI.LifeTimes;
 using Sugar.Object.Extensions;
 using System;
 using System.Collections;
@@ -11,9 +11,9 @@ namespace SDI;
 public class ServiceProvider(IServiceInstanceContanier contanier, IServiceLifeTime lifeTime) : IServiceProvider {
  private readonly List<IServiceAccessor> m_Accessors = [];
  public IServiceProvider RegisterSelf() {
-  this.InternalRegisterSelfAccessor(typeof(IServiceProvider), this);
-  this.InternalRegisterSelfAccessor(typeof(IServiceInstanceContanier), contanier);
-  this.InternalRegisterSelfAccessor(typeof(IServiceLifeTime), lifeTime);
+  this.RegisterSelfService(typeof(IServiceProvider), this);
+  this.RegisterSelfService(typeof(IServiceInstanceContanier), contanier);
+  this.RegisterSelfService(typeof(IServiceLifeTime), lifeTime);
   return this;
  }
  public bool IsImplemented(ServiceId id) {
@@ -26,7 +26,7 @@ public class ServiceProvider(IServiceInstanceContanier contanier, IServiceLifeTi
   return this.m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(this);
  }
  public IServiceProvider RegisterService(IServiceDescriptor descriptor) {
-  this.InternalRegisterAccessor(this.CreateAccessorAndVerifyRegistration(descriptor));
+  this.m_Accessors.Add(this.CreateAccessorAndVerifyRegistration(descriptor));
   return this;
  }
  public IServiceProvider RegisterServices(IEnumerable<IServiceDescriptor> descriptors) {
@@ -42,20 +42,14 @@ public class ServiceProvider(IServiceInstanceContanier contanier, IServiceLifeTi
   contanier.DisposeAll();
   GC.SuppressFinalize(this);
  }
- private void InternalRegisterSelfAccessor(Type type, object instance) {
-  this.InternalRegisterAccessor(CreateSelfAccessor(type, instance));
- }
- private void InternalRegisterAccessor(IServiceAccessor accessor) {
-  this.m_Accessors.Add(accessor);
+ private void RegisterSelfService(Type serviceType, object instance) {
+  const string serviceKey = "self";
+  var descriptor = new ServiceDescriptor(serviceType, instance.Type, typeof(SingletonServiceLifeTime), serviceKey);
+  this.RegisterService(descriptor).Forget();
+  contanier.Create(ServiceId.FromDescriptor(descriptor), instance).Forget();
  }
  private IServiceAccessor CreateAccessorAndVerifyRegistration(IServiceDescriptor descriptor) {
   ServiceAlreadyImplementedException.ThrowIfImplemented(this, ServiceId.FromDescriptor(descriptor));
   return lifeTime.CreateAccessor(contanier, descriptor);
- }
- private static IServiceAccessor CreateSelfAccessor(Type type, object instance) {
-  return CreateSelfAccessor(ServiceId.FromType(type, "self"), instance);
- }
- private static IServiceAccessor CreateSelfAccessor(ServiceId id, object instance) {
-  return new InstanceServiceAccessor(id, instance);
  }
 }
