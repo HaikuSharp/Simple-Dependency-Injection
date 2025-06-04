@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 namespace SDI.Helpers;
 internal static class EnumerableHelper {
- private static readonly ArrayList s_Buffer = [];
+ private static ArrayList s_Buffer;
  internal static Array ConvertToArray(this IEnumerable source, Type itemType) {
-  var buffer = s_Buffer;
+  var buffer = s_Buffer ??= [];
   foreach(var item in source) {
    buffer.Add(item).Forget();
   }
