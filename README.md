@@ -2,13 +2,6 @@
 
 Simple-Dependency-Injection (SDI) - это легковесная библиотека для внедрения зависимостей в .NET приложениях.
 
-## Установка
-Добавьте пакет через NuGet:
-
-```bash
-dotnet add package Simple-Dependency-Injection
-```
-
 ## Основные концепции
 
 ### 1. Регистрация сервисов
