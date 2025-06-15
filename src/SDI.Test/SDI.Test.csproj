@@ -1,12 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
- <ItemGroup>
-  <PackageReference Include="MSTest" Version="3.8.3" />
- </ItemGroup>
- <ItemGroup>
-  <ProjectReference Include="..\SDI.Extensions\SDI.Extensions.csproj" />
-  <ProjectReference Include="..\SDI\SDI.csproj" />
- </ItemGroup>
- <ItemGroup>
-  <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
- </ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="MSTest" Version="3.8.3" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\SDI.Extensions\SDI.Extensions.csproj" />
+		<ProjectReference Include="..\SDI\SDI.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
+	
 </Project>

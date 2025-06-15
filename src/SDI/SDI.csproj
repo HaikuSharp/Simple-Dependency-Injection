@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
- <ItemGroup>
-  <ProjectReference Include="..\SDI.Attribute\SDI.Attribute.csproj" />
-  <ProjectReference Include="..\SDI.Exceptions\SDI.Exceptions.csproj" />
- </ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\SDI.Attribute\SDI.Attribute.csproj" />
+		<ProjectReference Include="..\SDI.Exceptions\SDI.Exceptions.csproj" />
+	</ItemGroup>
+	
 </Project>

@@ -1,4 +1,6 @@
 ﻿namespace SDI.Abstraction;
-public interface IServiceConstructorResolver {
- IServiceConstructorInvoker Resolve(IServiceDescriptor descriptor);
+
+public interface IServiceConstructorResolver
+{
+    IServiceConstructorInvoker Resolve(IServiceDescriptor descriptor);
 }

@@ -1,4 +1,6 @@
 ﻿namespace SDI.Abstraction;
-public interface IServiceInstanceActivator {
- object Activate(IServiceProvider provider);
+
+public interface IServiceInstanceActivator
+{
+    object Activate(IServiceProvider provider);
 }
