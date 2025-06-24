@@ -10,13 +10,14 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI;
 
-public class ServiceProvider(IServiceInstanceContanier contanier, IServiceLifeTime lifeTime) : IServiceProvider
+public class ServiceProvider(IServiceInstanceContainer contanier, IServiceLifeTime lifeTime) : IServiceProvider
 {
     private readonly List<IServiceAccessor> m_Accessors = [];
+
     public IServiceProvider RegisterSelf()
     {
         RegisterSelfService(typeof(IServiceProvider), this);
-        RegisterSelfService(typeof(IServiceInstanceContanier), contanier);
+        RegisterSelfService(typeof(IServiceInstanceContainer), contanier);
         RegisterSelfService(typeof(IServiceLifeTime), lifeTime);
         return this;
     }
@@ -43,6 +44,7 @@ public class ServiceProvider(IServiceInstanceContanier contanier, IServiceLifeTi
     {
         ServiceNotImplementedException.ThrowIfNotImplemented(this, id);
         m_Accessors.RemoveAll(a => a.CanAccess(id)).Forget();
+        contanier.Dispose(id);
         return this;
     }
 
@@ -54,8 +56,7 @@ public class ServiceProvider(IServiceInstanceContanier contanier, IServiceLifeTi
 
     private void RegisterSelfService(Type serviceType, object instance)
     {
-        const string serviceKey = "self";
-        ServiceDescriptor descriptor = new(serviceType, instance.GetType(), typeof(SingletonServiceLifeTime), serviceKey);
+        ServiceDescriptor descriptor = new(serviceType, instance.GetType(), typeof(SingletonServiceLifeTime), "self");
         RegisterService(descriptor).Forget();
         contanier.Create(ServiceId.FromDescriptor(descriptor), instance).Forget();
     }
@@ -63,6 +64,6 @@ public class ServiceProvider(IServiceInstanceContanier contanier, IServiceLifeTi
     private IServiceAccessor CreateAccessorAndVerifyRegistration(IServiceDescriptor descriptor)
     {
         ServiceAlreadyImplementedException.ThrowIfImplemented(this, ServiceId.FromDescriptor(descriptor));
-        return lifeTime.CreateAccessor(contanier, descriptor);
+        return lifeTime.CreateAccessor(descriptor);
     }
 }

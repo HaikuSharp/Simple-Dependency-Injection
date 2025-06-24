@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SDI;
 
-public class ServiceInstanceContanier : IServiceInstanceContanier
+public class ServiceInstanceContanier : IServiceInstanceContainer
 {
     private readonly List<ServiceInstance> m_Instances = [];
 

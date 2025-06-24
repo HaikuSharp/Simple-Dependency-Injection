@@ -2,7 +2,7 @@
 
 namespace SDI.Accessors;
 
-public class SingletonServiceAccessor(ServiceId id, IServiceInstanceProvider instanceProvider) : ServiceAccessorBase(id)
+public class SingletonServiceAccessor(ServiceId id) : ServiceAccessorBase(id)
 {
-    public override object Access(IServiceProvider provider) => instanceProvider.GetInstance(Id);
+    public override object Access(IServiceProvider provider) => ((IServiceInstanceContainer)provider.GetService(ServiceId.From<IServiceInstanceContainer>("self"))).GetInstance(Id);
 }

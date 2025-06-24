@@ -2,7 +2,7 @@
 
 namespace SDI.Abstraction;
 
-public interface IServiceInstanceContanier : IServiceInstanceProvider, IDisposable
+public interface IServiceInstanceContainer : IServiceInstanceProvider, IDisposable
 {
     object Create(ServiceId id, object instance);
 

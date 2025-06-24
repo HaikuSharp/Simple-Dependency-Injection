@@ -5,5 +5,5 @@ namespace SDI.LifeTimes;
 
 public class SingletonServiceLifeTime : IServiceLifeTime
 {
-    public IServiceAccessor CreateAccessor(IServiceInstanceContanier contanier, IServiceDescriptor descriptor) => new SingletonServiceAccessor(ServiceId.FromDescriptor(descriptor), contanier);
+    public IServiceAccessor CreateAccessor(IServiceDescriptor descriptor) => new SingletonServiceAccessor(ServiceId.FromDescriptor(descriptor));
 }

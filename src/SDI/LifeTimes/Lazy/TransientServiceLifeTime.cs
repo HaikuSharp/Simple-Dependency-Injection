@@ -5,5 +5,5 @@ namespace SDI.LifeTimes.Lazy;
 
 public class TransientServiceLifeTime(IServiceActivatorResolver resolver) : LazyServiceLifeTimeBase(resolver)
 {
-    protected override IServiceAccessor CreateAccessor(IServiceInstanceContanier contanier, IServiceDescriptor descriptor, IServiceInstanceActivator activator) => new TransientServiceAccessor(ServiceId.FromDescriptor(descriptor), activator);
+    protected override IServiceAccessor CreateAccessor(IServiceDescriptor descriptor, IServiceInstanceActivator activator) => new TransientServiceAccessor(ServiceId.FromDescriptor(descriptor), activator);
 }

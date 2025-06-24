@@ -14,11 +14,12 @@ namespace SDI;
 public class ServiceSetup
 {
     public virtual IServiceProvider CreateProvider() => new ServiceProvider(CreateInstanceContanier(), CreateRootLifeTime()).RegisterSelf();
+
     public IServiceDescriptAnalizer<Type> CreateTypeAnalizer() => new InjectTypeServiceDescriptAnalizer(CreateAttributeTypeResolver<Type>(), CreateAttributeKeyResolver<Type>(), CreateAttributeLifeTimeResolver<Type>());
 
     public virtual IServiceDescriptAnalizer<Assembly> CreateAssemblyAnalizer() => new AssemblyServiceDescriptAnalizer(CreateTypeAnalizer());
 
-    protected virtual IServiceInstanceContanier CreateInstanceContanier() => new ServiceInstanceContanier();
+    protected virtual IServiceInstanceContainer CreateInstanceContanier() => new ServiceInstanceContanier();
 
     protected virtual IServiceLifeTime CreateRootLifeTime() => new ServiceLifeTimeManager(CreateServiceLifeTimes());
 

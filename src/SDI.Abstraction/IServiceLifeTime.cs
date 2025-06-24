@@ -2,5 +2,5 @@
 
 public interface IServiceLifeTime
 {
-    IServiceAccessor CreateAccessor(IServiceInstanceContanier contanier, IServiceDescriptor descriptor);
+    IServiceAccessor CreateAccessor(IServiceDescriptor descriptor);
 }

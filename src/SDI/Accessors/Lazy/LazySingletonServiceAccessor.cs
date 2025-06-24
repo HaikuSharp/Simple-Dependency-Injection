@@ -2,11 +2,12 @@
 
 namespace SDI.Accessors.Lazy;
 
-public class LazySingletonServiceAccessor(ServiceId id, IServiceInstanceActivator activator, IServiceInstanceContanier contanier) : LazyServiceAccessorBase(id, activator)
+public class LazySingletonServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : LazyServiceAccessorBase(id, activator)
 {
     public override object Access(IServiceProvider provider)
     {
-        ServiceId id = Id;
-        return contanier.TryGetInstance(id, out object instace) ? instace : contanier.Create(id, Activate(provider));
+        var id = Id;
+        IServiceInstanceContainer container = (IServiceInstanceContainer)provider.GetService(ServiceId.From<IServiceInstanceContainer>("self"));
+        return container.TryGetInstance(id, out object instace) ? instace : container.Create(id, Activate(provider));
     }
 }
