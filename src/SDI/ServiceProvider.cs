@@ -18,14 +18,6 @@ public class ServiceProvider(IServiceInstanceContainer contanier, IServiceLifeTi
 {
     private readonly List<IServiceAccessor> m_Accessors = [];
 
-    public IServiceProvider RegisterSelf()
-    {
-        RegisterSelfService(typeof(IServiceProvider), this);
-        RegisterSelfService(typeof(IServiceInstanceContainer), contanier);
-        RegisterSelfService(typeof(IServiceLifeTime), lifeTime);
-        return this;
-    }
-
     public bool IsImplemented(ServiceId id) => m_Accessors.Any(a => a.CanAccess(id));
 
     public IEnumerable GetServices(ServiceId id) => m_Accessors.Where(a => a.CanAccess(id)).Select(a => a.Access(this));
@@ -63,7 +55,15 @@ public class ServiceProvider(IServiceInstanceContainer contanier, IServiceLifeTi
         var activatorResolver = new ServiceActivatorResolver(new DefaultServiceConstructorResolver(), new ServiceMethodParameterDependencyResolver(new ServiceAttributeTypeResolver<ParameterInfo>(), new ServiceAttributeKeyResolver<ParameterInfo>()));
         var provider = new ServiceProvider(new ServiceInstanceContanier(), new ServiceLifeTimeManager([new SingletonServiceLifeTime(), new LazySingletonServiceLifeTime(activatorResolver), new TransientServiceLifeTime(activatorResolver)]));
         foreach(var descriptor in descriptors) provider.RegisterService(descriptor).Forget();
-        return provider;
+        return provider.RegisterSelf();
+    }
+
+    private ServiceProvider RegisterSelf()
+    {
+        RegisterSelfService(typeof(IServiceProvider), this);
+        RegisterSelfService(typeof(IServiceInstanceContainer), contanier);
+        RegisterSelfService(typeof(IServiceLifeTime), lifeTime);
+        return this;
     }
 
     private void RegisterSelfService(Type serviceType, object instance)
