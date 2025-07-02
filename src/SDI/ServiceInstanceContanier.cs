@@ -38,8 +38,8 @@ public class ServiceInstanceContanier : IServiceInstanceContainer
 
     public void DisposeAll()
     {
-        List<ServiceInstance> instances = m_Instances;
-        foreach(ServiceInstance instance in instances) instance.Dispose();
+        var instances = m_Instances;
+        foreach(var instance in instances) instance.Dispose();
         instances.Clear();
     }
 

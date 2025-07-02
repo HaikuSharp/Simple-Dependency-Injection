@@ -9,7 +9,7 @@ public class ServiceDependency(Type serviceType, object key) : ServiceDependency
     public override object GetDependency(Abstraction.IServiceProvider provider, ServiceId id)
     {
         if(provider.IsImplemented(id)) return provider.GetService(id);
-        Type serviceType = EnumerableHelper.GetElementType(ServiceType);
+        var serviceType = EnumerableHelper.GetElementType(ServiceType);
         return serviceType is not null ? provider.GetServices(ServiceId.FromType(serviceType, Key)).ConvertToArray(serviceType) : (object)null;
     }
 }

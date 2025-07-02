@@ -52,8 +52,8 @@ public class ServiceProvider(IServiceInstanceContainer contanier, IServiceLifeTi
 
     public static IServiceProvider Create(params IEnumerable<IServiceDescriptor> descriptors)
     {
-        var activatorResolver = new ServiceActivatorResolver(new DefaultServiceConstructorResolver(), new ServiceMethodParameterDependencyResolver(new ServiceAttributeTypeResolver<ParameterInfo>(), new ServiceAttributeKeyResolver<ParameterInfo>()));
-        var provider = new ServiceProvider(new ServiceInstanceContanier(), new ServiceLifeTimeManager([new SingletonServiceLifeTime(), new LazySingletonServiceLifeTime(activatorResolver), new TransientServiceLifeTime(activatorResolver)]));
+        ServiceActivatorResolver activatorResolver = new(new DefaultServiceConstructorResolver(), new ServiceMethodParameterDependencyResolver(new ServiceAttributeTypeResolver<ParameterInfo>(), new ServiceAttributeKeyResolver<ParameterInfo>()));
+        ServiceProvider provider = new(new ServiceInstanceContanier(), new ServiceLifeTimeManager([new SingletonServiceLifeTime(), new LazySingletonServiceLifeTime(activatorResolver), new TransientServiceLifeTime(activatorResolver)]));
         foreach(var descriptor in descriptors) provider.RegisterService(descriptor).Forget();
         return provider.RegisterSelf();
     }

@@ -12,7 +12,7 @@ internal static class EnumerableHelper
 
     internal static Array ConvertToArray(this IEnumerable source, Type itemType)
     {
-        ArrayList buffer = s_Buffer ??= [];
+        var buffer = s_Buffer ??= [];
         foreach(object item in source) buffer.Add(item).Forget();
         Array array = Array.CreateInstance(itemType, buffer.Count);
         buffer.CopyTo(array);
@@ -24,7 +24,7 @@ internal static class EnumerableHelper
     {
         if(type.IsArray) return type.GetElementType();
         if(type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>)) return type.GetGenericArguments()[0];
-        Type enumerableInterface = type.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+        var enumerableInterface = type.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>));
         return enumerableInterface is not null ? enumerableInterface.GetGenericArguments()[0] : typeof(IEnumerable).IsAssignableFrom(type) ? typeof(object) : null;
     }
 }

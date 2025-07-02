@@ -11,7 +11,7 @@ public class ServiceConstructorInstanceActivator(IServiceConstructorInvoker invo
 
     private object[] GetOrCreateArgumentsBuffer(IServiceProvider provider)
     {
-        IServiceDependency[] dependencies = m_Dependencies;
+        var dependencies = m_Dependencies;
         object[] buffer = m_ArgumentsBuffer ??= new object[dependencies.Length];
         for(int i = 0; i < buffer.Length; i++) buffer[i] = dependencies[i].GetDependency(provider);
         return buffer;
