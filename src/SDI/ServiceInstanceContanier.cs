@@ -13,7 +13,7 @@ public class ServiceInstanceContanier : IServiceInstanceContainer
 
     public bool HasInstance(ServiceId id) => m_Instances.Any(i => i.Id.Equals(id));
 
-    public object GetInstance(ServiceId id) => InternalGetInstance(id)?.Instance;
+    public object GetInstance(ServiceId id) => InternalGetInstance(id).Instance;
 
     public bool TryGetInstance(ServiceId id, out object instance)
     {
@@ -52,7 +52,7 @@ public class ServiceInstanceContanier : IServiceInstanceContainer
         return true;
     }
 
-    private class ServiceInstance(ServiceId id, object instance) : IDisposable
+    private readonly struct ServiceInstance(ServiceId id, object instance) : IDisposable
     {
         internal ServiceId Id => id;
 
