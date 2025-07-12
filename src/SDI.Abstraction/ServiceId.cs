@@ -1,6 +1,5 @@
 ﻿using Sugar.Object;
 using System;
-using System.Collections.Generic;
 
 namespace SDI.Abstraction;
 
@@ -19,11 +18,11 @@ public readonly struct ServiceId
 
     public static ServiceId FromType(Type type, object key) => new(type, key ?? AnyObject.Any);
 
+    public static ServiceId FromDescriptor<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor => FromType(descriptor.ServiceType, descriptor.Key);
+
     public static ServiceId From<T>() => From<T>(null);
 
     public static ServiceId From<T>(object key) => FromType(typeof(T), key);
-
-    public static ServiceId FromDescriptor(IServiceDescriptor descriptor) => FromType(descriptor.ServiceType, descriptor.Key);
 
     public bool Equals(ServiceId other) => m_Type.Equals(other.m_Type) && EqualsKeys(m_Key, other.m_Key);
 
@@ -32,8 +31,8 @@ public readonly struct ServiceId
     public override int GetHashCode()
     {
         int hashCode = 1193439425;
-        hashCode = (hashCode * -1521134295) + EqualityComparer<Type>.Default.GetHashCode(m_Type);
-        hashCode = (hashCode * -1521134295) + EqualityComparer<object>.Default.GetHashCode(m_Key);
+        hashCode = (hashCode * -1521134295) + m_Type.GetHashCode();
+        hashCode = (hashCode * -1521134295) + m_Key.GetHashCode();
         return hashCode;
     }
 

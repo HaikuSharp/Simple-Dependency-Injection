@@ -6,9 +6,9 @@ public interface IServiceDescriptor
 {
     Type ServiceType { get; }
 
+    object Key { get; }
+
     Type ImplementationType { get; }
 
-    Type LifeTimeType { get; }
-
-    object Key { get; }
+    IServiceAccessor CreateAccessor();
 }

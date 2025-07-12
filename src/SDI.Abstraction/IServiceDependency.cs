@@ -1,12 +1,6 @@
-﻿using System;
-
-namespace SDI.Abstraction;
+﻿namespace SDI.Abstraction;
 
 public interface IServiceDependency
 {
-    Type ServiceType { get; }
-
-    object Key { get; }
-
-    object GetDependency(IServiceProvider provider);
+    object Resolve(IServiceProvider provider);
 }
