@@ -7,5 +7,5 @@ internal static class InternalServiceProviderExtensions
 {
     internal static object GetIsntanceFromScope(this IServiceProvider provider, ServiceId serviceId, ScopeId scopeId) => provider.GetScope(scopeId).GetIsntance(serviceId);
 
-    internal static IServiceInstanceContainer GetScope(this IServiceProvider provider, ScopeId scopeId) => (IServiceInstanceContainer)provider.GetService(ServiceId.From<IServiceInstanceContainer>(scopeId));
+    internal static IServiceInstanceContainer GetScope(this IServiceProvider provider, ScopeId scopeId) => provider.GetService<IServiceInstanceContainer>(scopeId);
 }
