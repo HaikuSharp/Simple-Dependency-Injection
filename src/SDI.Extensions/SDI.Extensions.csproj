@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	
-	<ItemGroup>
-		<ProjectReference Include="..\SDI.Exceptions\SDI.Exceptions.csproj" />
-		<ProjectReference Include="..\SDI\SDI.csproj" />
-	</ItemGroup>
-	
-</Project>

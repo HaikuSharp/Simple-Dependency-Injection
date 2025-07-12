@@ -13,8 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SDI.Abstraction\SDI.Abstraction.csproj" />
-    <ProjectReference Include="..\SDI.Exceptions\SDI.Exceptions.csproj" />
-    <ProjectReference Include="..\SDI.Extensions\SDI.Extensions.csproj" />
     <ProjectReference Include="..\SDI\SDI.csproj" />
   </ItemGroup>
 
