@@ -1,6 +1,5 @@
 ﻿using SDI.Abstraction;
 using System;
-using System.Reflection;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Activating;
@@ -33,12 +32,12 @@ public sealed class ConstructorServiceActivator(IServiceConstructor constructor)
 
         if(dependencies is not null) return m_Dependencies;
 
-        var dependencyResolver = provider.GetService(ServiceId.From<IServiceDependencyResolver<ParameterInfo>>()) as IServiceDependencyResolver<ParameterInfo>;
+        var dependencyResolver = provider.GetService(ServiceId.From<IServiceDependencyResolver>()) as IServiceDependencyResolver;
 
         var parameters = constructor.Parameters;
         dependencies = m_Dependencies = new IServiceDependency[parameters.Count];
 
-        for(int i = 0; i < dependencies.Length; i++) dependencies[i] = dependencyResolver.Resolve(parameters[i]);
+        for(int i = 0; i < dependencies.Length; i++) dependencies[i] = dependencyResolver.Resolve(ServiceDependencyInfo.FromParameter(parameters[i]));
 
         return dependencies;
     }

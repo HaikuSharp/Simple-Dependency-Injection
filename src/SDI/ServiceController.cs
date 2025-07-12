@@ -6,13 +6,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI;
 
 public class ServiceController : IServiceController
 {
+    public const string DEFAULT_SERVICE_KEY = "default";
     private readonly List<IServiceAccessor> m_Accessors = [];
 
     public static IServiceController Create()
@@ -41,8 +41,8 @@ public class ServiceController : IServiceController
 
     protected virtual void SetupDefaultServices()
     {
-        this.RegisterInstance<IServiceController>("default", this);
-        this.RegisterInstance<IServiceDependencyResolver<ParameterInfo>>("default", new ServiceDependencyParameterResolver());
+        this.RegisterInstance<IServiceController>(DEFAULT_SERVICE_KEY, this);
+        this.RegisterInstance<IServiceDependencyResolver>(DEFAULT_SERVICE_KEY, new ServiceDependencyResolver());
     }
 
     internal object GetService(ServiceId id, IServiceProvider provider) => m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(provider);

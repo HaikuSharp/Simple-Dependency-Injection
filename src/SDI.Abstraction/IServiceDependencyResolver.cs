@@ -1,6 +1,6 @@
 ﻿namespace SDI.Abstraction;
 
-public interface IServiceDependencyResolver<in TScource>
+public interface IServiceDependencyResolver
 {
-    IServiceDependency Resolve(TScource source);
+    IServiceDependency Resolve(ServiceDependencyInfo dependencyInfo);
 }
