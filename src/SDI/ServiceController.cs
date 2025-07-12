@@ -84,7 +84,7 @@ public class ServiceController : IServiceController
             controller.RegisterInstance<IServiceProvider>(id, this);
             controller.RegisterInstance<IServiceController>(id, controller);
         }
-        
+
         internal void InternalDeinitialize()
         {
             var controller = InternalGetController();

@@ -8,5 +8,5 @@ public sealed class WeakInstanceServiceAccessor(ServiceId id, object instance) :
 {
     private readonly WeakReference<object> m_WeakInstance = new(instance);
 
-    protected override object Access(IServiceProvider provider, ServiceId id) => m_WeakInstance.TryGetTarget(out var instanceRef) ? instanceRef : null;
+    protected override object Access(IServiceProvider provider, ServiceId id) => m_WeakInstance.TryGetTarget(out object instanceRef) ? instanceRef : null;
 }

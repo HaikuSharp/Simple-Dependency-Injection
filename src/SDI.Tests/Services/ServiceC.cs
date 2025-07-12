@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SDI.Tests.Services;
+﻿namespace SDI.Tests.Services;
 
 public interface IServiceC
 {

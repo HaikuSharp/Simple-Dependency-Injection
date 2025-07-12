@@ -11,8 +11,8 @@ public sealed class ConstructorServiceActivator(IServiceConstructor constructor)
 
     protected override object Activate(IServiceProvider provider, IServiceConstructor constructor)
     {
-        var buffer = GetOrCreateArgumentsBuffer(provider, GetOrResolveDependencies(provider, constructor));
-        var instance = constructor.Invoke(buffer);
+        object[] buffer = GetOrCreateArgumentsBuffer(provider, GetOrResolveDependencies(provider, constructor));
+        object instance = constructor.Invoke(buffer);
         Array.Clear(buffer, 0, buffer.Length);
         return instance;
     }
@@ -32,7 +32,7 @@ public sealed class ConstructorServiceActivator(IServiceConstructor constructor)
 
         if(dependencies is not null) return m_Dependencies;
 
-        var dependencyResolver = provider.GetService(ServiceId.From<IServiceDependencyResolver>()) as IServiceDependencyResolver;
+        IServiceDependencyResolver dependencyResolver = provider.GetService(ServiceId.From<IServiceDependencyResolver>()) as IServiceDependencyResolver;
 
         var parameters = constructor.Parameters;
         dependencies = m_Dependencies = new IServiceDependency[parameters.Count];
