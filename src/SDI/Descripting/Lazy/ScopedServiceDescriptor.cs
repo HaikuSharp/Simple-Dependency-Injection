@@ -1,5 +1,5 @@
 ﻿using SDI.Abstraction;
-using SDI.Accessing;
+using SDI.Accessing.Lazy.Scoping;
 using System;
 
 namespace SDI.Descripting.Lazy;

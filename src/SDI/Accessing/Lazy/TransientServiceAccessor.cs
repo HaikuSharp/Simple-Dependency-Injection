@@ -1,8 +1,7 @@
 ﻿using SDI.Abstraction;
-using SDI.Accessing.Lazy;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
-namespace SDI.Accessing;
+namespace SDI.Accessing.Lazy;
 
 public class TransientServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : LazyServiceAccessorBase(id, activator)
 {

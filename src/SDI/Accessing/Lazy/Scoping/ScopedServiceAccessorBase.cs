@@ -1,9 +1,8 @@
 ﻿using SDI.Abstraction;
-using SDI.Accessing.Lazy;
 using SDI.Extensions;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
-namespace SDI.Accessing;
+namespace SDI.Accessing.Lazy.Scoping;
 
 public abstract class ScopedServiceAccessorBase(ServiceId id, IServiceInstanceActivator activator) : LazyServiceAccessorBase(id, activator)
 {
