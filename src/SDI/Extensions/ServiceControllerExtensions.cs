@@ -1,10 +1,8 @@
 ﻿using SDI.Abstraction;
 using SDI.Activating;
-using SDI.Activating.Constructing;
 using SDI.Descripting;
 using SDI.Descripting.Lazy;
 using System;
-using System.Linq;
 
 namespace SDI.Extensions;
 
@@ -16,11 +14,11 @@ public static class ServiceControllerExtensions
 
     public static void RegisterLazySingletonService<TService, TImplementation>(this IServiceController controller, object key) where TService : class where TImplementation : class, TService => controller.RegisterLazySingletonService(typeof(TService), key, typeof(TImplementation));
 
-    public static void RegisterScopedService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new ScopedServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
+    public static void RegisterScopedService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new ScopedServiceDescriptor(serviceType, key, new AutoServiceActivator(implementationType)));
 
-    public static void RegisterTransientService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new TransientServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
+    public static void RegisterTransientService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new TransientServiceDescriptor(serviceType, key, new AutoServiceActivator(implementationType)));
 
-    public static void RegisterLazySingletonService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new LazySingletonServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
+    public static void RegisterLazySingletonService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new LazySingletonServiceDescriptor(serviceType, key, new AutoServiceActivator(implementationType)));
 
     public static void RegisterScopedService<TService>(this IServiceController controller, object key, IServiceInstanceActivator activator) where TService : class => controller.RegisterScopedService(typeof(TService), key, activator);
 
@@ -45,12 +43,4 @@ public static class ServiceControllerExtensions
     public static void RegisterWeakSingletonService(this IServiceController controller, Type serviceType, object key, object instance) => controller.RegisterService(new WeakSingletonServiceDescriptor(serviceType, key, instance));
 
     public static void RegisterSingletonService(this IServiceController controller, Type serviceType, object key, object instance) => controller.RegisterService(new SingletonServiceDescriptor(serviceType, key, instance));
-
-    private static IServiceInstanceActivator GetServiceActivator(Type type)
-    {
-        var constructor = type.GetConstructors().OrderBy(c => c.GetParameters().Length).FirstOrDefault();
-        if(constructor is null) return null;
-        ServiceConstructor serviceConstructor = new(constructor);
-        return serviceConstructor.Parameters.Count is 0 ? new EmptyConstructorServiceActivator(serviceConstructor) : new ConstructorServiceActivator(serviceConstructor);
-    }
 }

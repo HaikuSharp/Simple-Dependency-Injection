@@ -1,7 +1,6 @@
 ﻿using SDI.Abstraction;
 using SDI.Exceptions;
 using SDI.Extensions;
-using SDI.Resolving;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI;
 
-public class ServiceController : IServiceController
+public abstract class ServiceController : IServiceController
 {
     public delegate void ServiceRegisterHandler(ServiceId id);
 
@@ -19,13 +18,6 @@ public class ServiceController : IServiceController
 
     public event ServiceRegisterHandler OnServiceRegistered;
     public event ServiceRegisterHandler OnServiceUnregistered;
-
-    public static IServiceController Create()
-    {
-        ServiceController controller = new();
-        controller.SetupDefaultServices();
-        return controller;
-    }
 
     public bool IsRegistered(ServiceId id) => m_Accessors.Any(a => a.CanAccess(id));
 
@@ -57,15 +49,11 @@ public class ServiceController : IServiceController
         return provider;
     }
 
-    protected virtual void SetupDefaultServices()
-    {
-        this.RegisterInstance<IServiceController>(DEFAULT_SERVICE_KEY, this);
-        this.RegisterInstance<IServiceDependencyResolver>(DEFAULT_SERVICE_KEY, new ServiceDependencyResolver());
-    }
+    protected abstract void SetupDefaultServices();
 
-    private object GetService(ServiceId id, IServiceProvider provider) => m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(provider);
+    private object GetService(ServiceId id, IServiceProvider provider) => m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(provider, id);
 
-    private IEnumerable GetServices(ServiceId id, IServiceProvider provider) => m_Accessors.Where(a => a.CanAccess(id)).Select(a => a.Access(provider));
+    private IEnumerable GetServices(ServiceId id, IServiceProvider provider) => m_Accessors.Where(a => a.CanAccess(id)).Select(a => a.Access(provider, id));
 
     internal void RegisterAccessor(IServiceAccessor accessor) => m_Accessors.Add(accessor);
 
@@ -99,9 +87,9 @@ public class ServiceController : IServiceController
             if(controller is null) return;
             var scopeId = Id;
 
-            controller.RegisterInstance(scopeId, Container);
-            controller.RegisterInstance<IServiceProvider>(scopeId, this);
-            controller.RegisterInstance<IServiceController>(scopeId, controller);
+            controller.RegisterWeakInstance(scopeId, Container);
+            controller.RegisterWeakInstance<IServiceProvider>(scopeId, this);
+            controller.RegisterWeakInstance<IServiceController>(scopeId, controller);
 
             controller.OnServiceUnregistered += Container.Dispose;
         }

@@ -1,6 +1,8 @@
-﻿using SDI.Abstraction;
+﻿using Microsoft.Testing.Platform.Services;
+using SDI.Abstraction;
 using SDI.Extensions;
 using SDI.Tests.Services;
+using Sugar.Object.Extensions;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Tests;
@@ -11,7 +13,7 @@ public sealed class ServiceProviderTestBase
     [TestMethod]
     public void DoAccessTest()
     {
-        var controller = ServiceController.Create();
+        var controller = DefaultServiceController.Create();
         Register(controller);
         Access(controller.CreateScope(ScopeId.Default));
     }
@@ -24,26 +26,26 @@ public sealed class ServiceProviderTestBase
         controller.RegisterLazySingletonService<IServiceB, ServiceB1>("1");
 
         controller.RegisterLazySingletonService<IServiceC, ServiceC>(ServiceController.DEFAULT_SERVICE_KEY);
+
+        controller.RegisterTransientService(typeof(IServiceG<,>), ServiceController.DEFAULT_SERVICE_KEY, typeof(ServiceG<>));
     }
 
     private static void Access(IServiceProvider provider)
     {
-        var serviceAInstance0 = provider.GetService<IServiceA>();
-        var serviceAInstance1 = provider.GetService<IServiceA>();
+        var serviceAInstance0 = provider.GetRequiredService<IServiceA>();
+        var serviceAInstance1 = provider.GetRequiredService<IServiceA>();
 
-        Assert.IsNotNull(serviceAInstance0);
-        Assert.IsNotNull(serviceAInstance1);
         Assert.AreNotEqual(serviceAInstance0, serviceAInstance1);
 
-        Assert.IsNotNull(provider.GetService<IServiceB>("0"));
-        Assert.IsNotNull(provider.GetService<IServiceB>("1"));
+        provider.GetRequiredService<IServiceB>("0").Forget();
+        provider.GetRequiredService<IServiceB>("1").Forget();
 
-        var serviceCInstance0 = provider.GetService<IServiceC>();
-        var serviceCInstance1 = provider.GetService<IServiceC>();
+        var serviceCInstance0 = provider.GetRequiredService<IServiceC>();
+        var serviceCInstance1 = provider.GetRequiredService<IServiceC>();
 
-        Assert.IsNotNull(serviceCInstance0);
-        Assert.IsNotNull(serviceCInstance1);
         Assert.AreEqual(serviceCInstance0, serviceCInstance1);
         Assert.AreEqual(2, serviceCInstance0.BCount);
+
+        provider.GetRequiredService<IServiceG<IServiceA, IServiceB>>().Forget();
     }
 }

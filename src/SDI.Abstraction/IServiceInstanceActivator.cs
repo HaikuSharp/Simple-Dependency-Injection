@@ -2,5 +2,5 @@
 
 public interface IServiceInstanceActivator
 {
-    object Activate(IServiceProvider provider);
+    object Activate(ServiceId requestedId, IServiceProvider provider);
 }

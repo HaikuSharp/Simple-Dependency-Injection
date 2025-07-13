@@ -5,5 +5,5 @@ namespace SDI.Accessing.Lazy;
 
 public abstract class LazyServiceAccessorBase(ServiceId id, IServiceInstanceActivator activator) : ServiceAccessorBase(id)
 {
-    protected object CreateInstance(IServiceProvider provider) => activator.Activate(provider);
+    protected object CreateInstance(ServiceId requestedId, IServiceProvider provider) => activator.Activate(requestedId, provider);
 }

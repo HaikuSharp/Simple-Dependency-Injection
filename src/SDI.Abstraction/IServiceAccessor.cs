@@ -2,7 +2,7 @@
 
 public interface IServiceAccessor
 {
-    bool CanAccess(ServiceId id);
+    bool CanAccess(ServiceId requestedId);
 
-    object Access(IServiceProvider provider);
+    object Access(IServiceProvider provider, ServiceId requestedId);
 }

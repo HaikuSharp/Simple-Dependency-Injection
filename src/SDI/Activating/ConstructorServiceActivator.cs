@@ -10,7 +10,7 @@ public sealed class ConstructorServiceActivator(IServiceConstructor constructor)
     private IServiceDependency[] m_Dependencies;
     private object[] m_ArgumentsBuffer;
 
-    protected override object Activate(IServiceProvider provider, IServiceConstructor constructor)
+    protected override object Activate(ServiceId requestedId, IServiceProvider provider, IServiceConstructor constructor)
     {
         object[] buffer = GetOrCreateArgumentsBuffer(provider, GetOrResolveDependencies(provider, constructor));
         object instance = constructor.Invoke(buffer);

@@ -5,7 +5,7 @@ namespace SDI.Activating;
 
 public abstract class ConstructorServiceActivatorBase(IServiceConstructor constructor) : IServiceInstanceActivator
 {
-    public object Activate(IServiceProvider provider) => Activate(provider, constructor);
+    public object Activate(ServiceId requestedId, IServiceProvider provider) => Activate(requestedId, provider, constructor);
 
-    protected abstract object Activate(IServiceProvider provider, IServiceConstructor constructor);
+    protected abstract object Activate(ServiceId requestedId, IServiceProvider provider, IServiceConstructor constructor);
 }

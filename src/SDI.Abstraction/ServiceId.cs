@@ -16,6 +16,8 @@ public readonly struct ServiceId
 
     public bool IsGeneric => m_Type.IsGenericType;
 
+    public bool IsClosedGeneric => m_Type.ContainsGenericParameters;
+
     public ServiceId GenericDefinition => FromType(m_Type.GetGenericTypeDefinition(), m_Key);
 
     public static ServiceId FromType(Type type) => FromType(type, null);
@@ -47,4 +49,8 @@ public readonly struct ServiceId
     public static bool operator ==(ServiceId left, ServiceId rigth) => left.Equals(rigth);
 
     public static bool operator !=(ServiceId left, ServiceId rigth) => !(left == rigth);
+
+    public static implicit operator Type(ServiceId id) => id.m_Type;
+
+    public static implicit operator ServiceId(Type type) => FromType(type);
 }

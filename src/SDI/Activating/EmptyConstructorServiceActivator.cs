@@ -5,5 +5,5 @@ namespace SDI.Activating;
 
 public sealed class EmptyConstructorServiceActivator(IServiceConstructor constructor) : ConstructorServiceActivatorBase(constructor)
 {
-    protected override object Activate(IServiceProvider provider, IServiceConstructor constructor) => constructor.Invoke([]);
+    protected override object Activate(ServiceId requestedId, IServiceProvider provider, IServiceConstructor constructor) => constructor.Invoke([]);
 }
