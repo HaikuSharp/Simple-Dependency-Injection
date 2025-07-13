@@ -13,7 +13,7 @@ public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivato
     public object Activate(ServiceId requestedId, IServiceProvider provider)
     {
         var constructor = GetConstructor(provider);
-        object[] buffer = GetOrCreateArgumentsBuffer(provider, GetOrResolveDependencies(provider, constructor));
+        object[] buffer = constructor.Parameters.Count is 0 ? [] : GetOrCreateArgumentsBuffer(provider, GetOrResolveDependencies(provider, constructor));
         object instance = constructor.Invoke(buffer);
         Array.Clear(buffer, 0, buffer.Length);
         return instance;
@@ -24,8 +24,6 @@ public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivato
     private object[] GetOrCreateArgumentsBuffer(IServiceProvider provider, IServiceDependency[] dependencies)
     {
         object[] buffer = m_ArgumentsBuffer ??= new object[dependencies.Length];
-
-        if(buffer.Length is 0) return buffer;
 
         for(int i = 0; i < buffer.Length; i++) buffer[i] = dependencies[i].Resolve(provider);
 
@@ -38,11 +36,8 @@ public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivato
 
         if(dependencies is not null) return m_Dependencies;
 
-        var parameters = constructor.Parameters;
-
-        if(parameters.Count is 0) return m_Dependencies = [];
-
         var dependencyResolver = provider.GetRequiredService<IServiceDependencyResolver>();
+        var parameters = constructor.Parameters;
         dependencies = m_Dependencies = new IServiceDependency[parameters.Count];
 
         for(int i = 0; i < dependencies.Length; i++) dependencies[i] = dependencyResolver.Resolve(ServiceDependencyInfo.FromParameter(parameters[i]));
