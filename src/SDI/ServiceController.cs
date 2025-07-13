@@ -45,9 +45,9 @@ public class ServiceController : IServiceController
         this.RegisterInstance<IServiceDependencyResolver>(DEFAULT_SERVICE_KEY, new ServiceDependencyResolver());
     }
 
-    internal object GetService(ServiceId id, IServiceProvider provider) => m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(provider);
+    private object GetService(ServiceId id, IServiceProvider provider) => m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(provider);
 
-    internal IEnumerable GetServices(ServiceId id, IServiceProvider provider) => m_Accessors.Where(a => a.CanAccess(id)).Select(a => a.Access(provider));
+    private IEnumerable GetServices(ServiceId id, IServiceProvider provider) => m_Accessors.Where(a => a.CanAccess(id)).Select(a => a.Access(provider));
 
     internal void RegisterAccessor(IServiceAccessor accessor) => m_Accessors.Add(accessor);
 
@@ -137,7 +137,6 @@ public class ServiceController : IServiceController
 
                 public void Dispose()
                 {
-                    if(instance is null) return;
                     if(instance is not IDisposable disposable) return;
                     disposable.Dispose();
                 }
