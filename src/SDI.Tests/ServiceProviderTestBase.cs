@@ -18,12 +18,12 @@ public sealed class ServiceProviderTestBase
 
     private static void Register(IServiceController controller)
     {
-        controller.RegisterTransientService<IServiceA, ServiceA>("default");
+        controller.RegisterTransientService<IServiceA, ServiceA>(ServiceController.DEFAULT_SERVICE_KEY);
 
         controller.RegisterLazySingletonService<IServiceB, ServiceB0>("0");
         controller.RegisterLazySingletonService<IServiceB, ServiceB1>("1");
 
-        controller.RegisterLazySingletonService<IServiceC, ServiceC>("default");
+        controller.RegisterLazySingletonService<IServiceC, ServiceC>(ServiceController.DEFAULT_SERVICE_KEY);
     }
 
     private static void Access(IServiceProvider provider)
