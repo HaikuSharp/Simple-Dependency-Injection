@@ -18,6 +18,8 @@ public readonly struct ServiceId
 
     public bool IsClosedGeneric => m_Type.ContainsGenericParameters;
 
+    public ServiceId IgnoreKey => FromType(m_Type);
+
     public ServiceId GenericDefinition => FromType(m_Type.GetGenericTypeDefinition(), m_Key);
 
     public static ServiceId FromType(Type type) => FromType(type, null);
