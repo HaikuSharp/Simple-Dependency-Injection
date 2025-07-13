@@ -15,7 +15,7 @@ public sealed class ServiceProviderTestBase
     {
         var controller = DefaultServiceController.Create();
         Register(controller);
-        Access(controller.CreateScope(ScopeId.Default));
+        Access(controller.CreateDefaultScope());
     }
 
     private static void Register(IServiceController controller)

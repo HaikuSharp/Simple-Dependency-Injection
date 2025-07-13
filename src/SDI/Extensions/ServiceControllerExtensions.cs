@@ -44,5 +44,7 @@ public static class ServiceControllerExtensions
 
     public static void RegisterSingletonService(this IServiceController controller, Type serviceType, object key, object instance) => controller.RegisterService(new SingletonServiceDescriptor(serviceType, key, instance));
 
+    public static Abstraction.IServiceProvider CreateDefaultScope(this IServiceController controller) => controller.CreateScope(ScopeId.Default);
+
     private static IServiceInstanceActivator GetServiceActivator(Type serviceImplementationType) => serviceImplementationType.IsGenericType && serviceImplementationType.ContainsGenericParameters ? new GenericServiceActivator(serviceImplementationType) : new DefaultConstructorServiceActivator(serviceImplementationType);
 }
