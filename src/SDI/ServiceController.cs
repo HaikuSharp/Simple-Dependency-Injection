@@ -129,13 +129,13 @@ public abstract class ServiceController : IServiceController
             public void Dispose(ServiceId id)
             {
                 var instances = m_Instances;
-                for(int i = 0; i < instances.Count; i++)
+
+                for(int i = instances.Count - 1; i >= 0; i--)
                 {
                     var serviceInstance = instances[i];
                     if(serviceInstance.Id != id) continue;
-                    serviceInstance.Dispose();
                     instances.RemoveAt(i);
-                    break;
+                    serviceInstance.Dispose();
                 }
             }
 
