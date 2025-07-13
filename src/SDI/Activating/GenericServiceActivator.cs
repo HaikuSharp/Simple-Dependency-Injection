@@ -1,5 +1,4 @@
 ﻿using SDI.Abstraction;
-using SDI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +6,16 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Activating;
 
-public sealed class AutoServiceActivator(Type serviceImplementationType) : IServiceInstanceActivator
+public sealed class GenericServiceActivator(Type serviceImplementationType) : IServiceInstanceActivator
 {
     private readonly Dictionary<Type, IServiceInstanceActivator> m_Activators = [];
 
-    public object Activate(ServiceId requestedId, IServiceProvider provider) => GetOrCreateActivator(requestedId, provider).Activate(requestedId, provider);
+    public object Activate(ServiceId requestedId, IServiceProvider provider) => GetOrCreateActivator(requestedId).Activate(requestedId, provider);
 
-    private IServiceInstanceActivator GetOrCreateActivator(Type type, IServiceProvider provider)
+    private IServiceInstanceActivator GetOrCreateActivator(Type type)
     {
         if(m_Activators.TryGetValue(type, out var activator)) return activator;
-        activator = provider.GetRequiredService<IServiceConstructorResolver>().Resolve(type.IsGenericType ? ConstructConcreteType(type, serviceImplementationType) : serviceImplementationType).AsActivator(); // provider.GetRequiredService<IServiceConstructorResolver>()
+        activator = new DefaultConstructorServiceActivator(type.IsGenericType ? ConstructConcreteType(type, serviceImplementationType) : serviceImplementationType);
         m_Activators.Add(type, activator);
         return activator;
     }
