@@ -4,7 +4,7 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Accessing;
 
-public sealed class WeakInstanceServiceAccessor(ServiceId id, object instance) : ServiceAccessorBase(id)
+public sealed class WeakSingletonServiceAccessor(ServiceId id, object instance) : ServiceAccessorBase(id)
 {
     private readonly WeakReference<object> m_WeakInstance = new(instance);
 

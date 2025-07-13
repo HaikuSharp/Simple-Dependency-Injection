@@ -2,9 +2,9 @@
 using SDI.Accessing;
 using System;
 
-namespace SDI.Descripting;
+namespace SDI.Descripting.Lazy;
 
-public sealed class TransientServiceDescriptor(Type serviceType, object key, IServiceInstanceActivator activator) : InstantiateServiceDescriptorBase(serviceType, key, activator)
+public class TransientServiceDescriptor(Type serviceType, object key, IServiceInstanceActivator activator) : LazyServiceDescriptorBase(serviceType, key, activator)
 {
     protected override IServiceAccessor CreateAccessor(ServiceId id, IServiceInstanceActivator activator) => new TransientServiceAccessor(id, activator);
 }

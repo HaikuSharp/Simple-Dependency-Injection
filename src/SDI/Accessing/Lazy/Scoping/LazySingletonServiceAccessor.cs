@@ -3,7 +3,7 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Accessing;
 
-public sealed class LazyInstanceServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : LazyScopedServiceAccessorBase(id, activator)
+public class LazySingletonServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : ScopedServiceAccessorBase(id, activator)
 {
     protected override ScopeId GetScopeId(IServiceProvider provider) => ScopeId.Default;
 }

@@ -1,9 +1,10 @@
 ﻿using SDI.Abstraction;
+using SDI.Accessing;
 using System;
 
 namespace SDI.Descripting;
 
-public abstract class InstanceServiceDescriptorBase(Type serviceType, object key, object instance) : ServiceDescriptorBase(serviceType, key)
+public abstract class SingletonServiceDescriptorBase(Type serviceType, object key, object instance) : ServiceDescriptorBase(serviceType, key)
 {
     public object Isntance => instance;
 
