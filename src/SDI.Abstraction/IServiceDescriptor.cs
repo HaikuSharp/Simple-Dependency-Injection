@@ -8,7 +8,5 @@ public interface IServiceDescriptor
 
     object Key { get; }
 
-    Type ImplementationType { get; }
-
     IServiceAccessor CreateAccessor();
 }

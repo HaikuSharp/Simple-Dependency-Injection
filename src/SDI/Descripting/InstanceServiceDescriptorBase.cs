@@ -5,8 +5,6 @@ namespace SDI.Descripting;
 
 public abstract class InstanceServiceDescriptorBase(Type serviceType, object key, object instance) : ServiceDescriptorBase(serviceType, key)
 {
-    public sealed override Type ImplementationType => instance.GetType();
-
     public object Isntance => instance;
 
     protected sealed override IServiceAccessor CreateAccessor(ServiceId id) => CreateAccessor(id, instance);

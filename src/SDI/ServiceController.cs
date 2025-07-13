@@ -31,7 +31,7 @@ public class ServiceController : IServiceController
 
     public void RegisterService<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor
     {
-        var id = ServiceId.FromDescriptor(descriptor);
+        ServiceId id = ServiceId.FromDescriptor(descriptor);
         ServiceAlreadyRegisteredException.ThrowIfRegistered(this, id);
         RegisterAccessor(descriptor.CreateAccessor());
         OnServiceRegistered?.Invoke(id);

@@ -9,8 +9,6 @@ public abstract class ServiceDescriptorBase(Type serviceType, object key) : ISer
 
     public object Key => key;
 
-    public abstract Type ImplementationType { get; }
-
     public IServiceAccessor CreateAccessor() => CreateAccessor(ServiceId.FromDescriptor(this));
 
     protected abstract IServiceAccessor CreateAccessor(ServiceId id);
