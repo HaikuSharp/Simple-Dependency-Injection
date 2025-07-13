@@ -12,8 +12,13 @@ namespace SDI;
 
 public class ServiceController : IServiceController
 {
+    public delegate void ServiceRegisterHandler(ServiceId id);
+
     public const string DEFAULT_SERVICE_KEY = "default";
     private readonly List<IServiceAccessor> m_Accessors = [];
+
+    public event ServiceRegisterHandler OnServiceRegistered;
+    public event ServiceRegisterHandler OnServiceUnregistered;
 
     public static IServiceController Create()
     {
@@ -26,11 +31,24 @@ public class ServiceController : IServiceController
 
     public void RegisterService<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor
     {
-        ServiceAlreadyRegisteredException.ThrowIfRegistered(this, ServiceId.FromDescriptor(descriptor));
+        var id = ServiceId.FromDescriptor(descriptor);
+        ServiceAlreadyRegisteredException.ThrowIfRegistered(this, id);
         RegisterAccessor(descriptor.CreateAccessor());
+        OnServiceRegistered?.Invoke(id);
     }
 
-    public void UnregisterService(ServiceId id) => m_Accessors.RemoveAll(a => a.CanAccess(id));
+    public void UnregisterService(ServiceId id)
+    {
+        var accessors = m_Accessors;
+        for(int i = 0; i < accessors.Count; i++)
+        {
+            var accessor = accessors[i];
+            if(!accessor.CanAccess(id)) continue;
+            accessors.RemoveAt(i);
+            OnServiceUnregistered?.Invoke(id);
+            break;
+        }
+    }
 
     public IServiceProvider CreateScope(ScopeId id)
     {
@@ -51,7 +69,7 @@ public class ServiceController : IServiceController
 
     internal void RegisterAccessor(IServiceAccessor accessor) => m_Accessors.Add(accessor);
 
-    private sealed class ServiceProvider(ScopeId id, ServiceController controller) : IServiceProvider
+    private sealed class ServiceProvider(ScopeId scopeId, ServiceController controller) : IServiceProvider
     {
         private readonly WeakReference<ServiceController> m_WeakController = new(controller);
 
@@ -59,7 +77,7 @@ public class ServiceController : IServiceController
 
         public IServiceController Controller => InternalGetController();
 
-        public IServiceInstanceContainer Container { get; } = new ServiceContainer(id);
+        public IServiceInstanceContainer Container { get; } = new ServiceContainer(scopeId);
 
         public bool IsImplemented(ServiceId id) => InternalGetController().IsRegistered(id);
 
@@ -78,21 +96,27 @@ public class ServiceController : IServiceController
         internal void InternalInitialize()
         {
             var controller = InternalGetController();
-            var id = Id;
+            if(controller is null) return;
+            var scopeId = Id;
 
-            controller.RegisterInstance<IServiceInstanceContainer>(id, Container);
-            controller.RegisterInstance<IServiceProvider>(id, this);
-            controller.RegisterInstance<IServiceController>(id, controller);
+            controller.RegisterInstance(scopeId, Container);
+            controller.RegisterInstance<IServiceProvider>(scopeId, this);
+            controller.RegisterInstance<IServiceController>(scopeId, controller);
+
+            controller.OnServiceUnregistered += Container.Dispose;
         }
 
         internal void InternalDeinitialize()
         {
             var controller = InternalGetController();
-            var id = Id;
+            if(controller is null) return;
+            var scopeId = Id;
 
-            controller.UnregisterInstance<IServiceInstanceContainer>(id);
-            controller.UnregisterInstance<IServiceProvider>(id);
-            controller.UnregisterInstance<IServiceController>(id);
+            controller.UnregisterInstance<IServiceInstanceContainer>(scopeId);
+            controller.UnregisterInstance<IServiceProvider>(scopeId);
+            controller.UnregisterInstance<IServiceController>(scopeId);
+
+            controller.OnServiceUnregistered -= Container.Dispose;
         }
 
         private ServiceController InternalGetController() => m_WeakController.TryGetTarget(out var controllerRef) ? controllerRef : null;
@@ -114,19 +138,23 @@ public class ServiceController : IServiceController
 
             public object GetIsntance(ServiceId id) => m_Instances.FirstOrDefault(i => id == i.Id).Instance;
 
-            public void Dispose(ServiceId id) => m_Instances.RemoveAll(i => DisposePredicate(i, id));
+            public void Dispose(ServiceId id)
+            {
+                var instances = m_Instances;
+                for(int i = 0; i < instances.Count; i++)
+                {
+                    var serviceInstance = instances[i];
+                    if(serviceInstance.Id != id) continue;
+                    serviceInstance.Dispose();
+                    instances.RemoveAt(i);
+                    break;
+                }
+            }
 
             public void Dispose()
             {
                 m_Instances.ForEach(i => i.Dispose());
                 m_Instances.Clear();
-            }
-
-            private static bool DisposePredicate(ServiceInstance instance, ServiceId id)
-            {
-                if(!instance.Id.Equals(id)) return false;
-                instance.Dispose();
-                return true;
             }
 
             private readonly struct ServiceInstance(ServiceId id, object instance) : IDisposable
