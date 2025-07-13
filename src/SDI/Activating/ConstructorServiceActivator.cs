@@ -5,7 +5,7 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Activating;
 
-public sealed class ConstructorServiceActivator(IServiceConstructor constructor) : EmptyConstructorServiceActivatorBase(constructor)
+public sealed class ConstructorServiceActivator(IServiceConstructor constructor) : ConstructorServiceActivatorBase(constructor)
 {
     private IServiceDependency[] m_Dependencies;
     private object[] m_ArgumentsBuffer;
@@ -33,7 +33,7 @@ public sealed class ConstructorServiceActivator(IServiceConstructor constructor)
 
         if(dependencies is not null) return m_Dependencies;
 
-        IServiceDependencyResolver dependencyResolver = provider.GetRequiredService<IServiceDependencyResolver>();
+        var dependencyResolver = provider.GetRequiredService<IServiceDependencyResolver>();
 
         var parameters = constructor.Parameters;
         dependencies = m_Dependencies = new IServiceDependency[parameters.Count];

@@ -3,7 +3,7 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Activating;
 
-public sealed class EmptyConstructorServiceActivator(IServiceConstructor constructor) : EmptyConstructorServiceActivatorBase(constructor)
+public sealed class EmptyConstructorServiceActivator(IServiceConstructor constructor) : ConstructorServiceActivatorBase(constructor)
 {
     protected override object Activate(IServiceProvider provider, IServiceConstructor constructor) => constructor.Invoke([]);
 }

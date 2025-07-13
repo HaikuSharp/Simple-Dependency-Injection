@@ -4,7 +4,7 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Activating;
 
-public abstract class EmptyConstructorServiceActivatorBase(IServiceConstructor constructor) : IServiceInstanceActivator
+public abstract class ConstructorServiceActivatorBase(IServiceConstructor constructor) : IServiceInstanceActivator
 {
     public Type ActivateType => constructor.DeclaringType;
 

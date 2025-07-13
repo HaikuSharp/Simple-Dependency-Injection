@@ -14,6 +14,10 @@ public readonly struct ServiceId
         m_Key = key;
     }
 
+    public bool IsGeneric => m_Type.IsGenericType;
+
+    public ServiceId GenericDefinition => FromType(m_Type.GetGenericTypeDefinition(), m_Key);
+
     public static ServiceId FromType(Type type) => FromType(type, null);
 
     public static ServiceId FromType(Type type, object key) => new(type, key ?? AnyObject.Any);
