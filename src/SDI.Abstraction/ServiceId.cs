@@ -16,7 +16,7 @@ public readonly struct ServiceId
 
     public bool IsGeneric => m_Type.IsGenericType;
 
-    public bool IsClosedGeneric => m_Type.ContainsGenericParameters;
+    public bool IsClosedGeneric => !m_Type.ContainsGenericParameters;
 
     public ServiceId IgnoreKey => FromType(m_Type);
 

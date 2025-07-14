@@ -29,7 +29,8 @@ public sealed class ServiceProviderTestBase
 
         controller.RegisterLazySingletonService<IServiceC, ServiceC>(ServiceController.DEFAULT_SERVICE_KEY);
 
-        controller.RegisterTransientService(typeof(IServiceG<,>), ServiceController.DEFAULT_SERVICE_KEY, typeof(ServiceG<>));
+        controller.RegisterTransientService(typeof(IServiceG<,>), "0", typeof(ServiceG0<>));
+        controller.RegisterTransientService(typeof(IServiceG<,>), "1", typeof(ServiceG1<>));
     }
 
     private static void Access(IServiceProvider provider)
@@ -48,6 +49,10 @@ public sealed class ServiceProviderTestBase
         Assert.AreEqual(serviceCInstance0, serviceCInstance1);
         Assert.AreEqual(2, serviceCInstance0.BCount);
 
-        provider.GetRequiredService<IServiceG<IServiceA, IServiceB>>().Forget();
+        // When checking the registration, only ServiceType is taken into account,
+        // so we need to specify unique keys,
+        // otherwise Activator will not know which ImplementationType to use when substituting Generic arguments
+        provider.GetRequiredService<IServiceG<IServiceA, IServiceA>>("0").Forget();
+        provider.GetRequiredService<IServiceG<IServiceA, IServiceB>>("1").Forget();
     }
 }

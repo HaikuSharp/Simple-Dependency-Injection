@@ -15,7 +15,9 @@ public sealed class GenericServiceActivator(Type serviceImplementationType) : IS
     private IServiceInstanceActivator GetOrCreateActivator(Type type)
     {
         if(m_Activators.TryGetValue(type, out var activator)) return activator;
-        activator = new DefaultConstructorServiceActivator(type.IsGenericType ? ConstructConcreteType(type, serviceImplementationType) : serviceImplementationType);
+        var concreteType = type.IsGenericType ? ConstructConcreteType(type, serviceImplementationType) : serviceImplementationType;
+        if(!type.IsAssignableFrom(concreteType)) throw new ArgumentException($"Type {concreteType.FullName} is not compatible with requested type {type.FullName}");
+        activator = new DefaultConstructorServiceActivator(concreteType);
         m_Activators.Add(type, activator);
         return activator;
     }
@@ -24,7 +26,7 @@ public sealed class GenericServiceActivator(Type serviceImplementationType) : IS
     {
         var sourceTypeArgs = sourceType.GetGenericArguments();
         int targetGenericParamCount = genericDefinition.GetGenericArguments().Length;
-        if(targetGenericParamCount > sourceTypeArgs.Length) throw new ArgumentException($"Not enough type arguments in {sourceType.Name} to construct {genericDefinition.Name}. Required: {targetGenericParamCount}, available: {sourceTypeArgs.Length}.", nameof(sourceType));
+        if(targetGenericParamCount > sourceTypeArgs.Length) throw new ArgumentException($"Not enough type arguments in {sourceType.FullName} to construct {genericDefinition.FullName}. Required: {targetGenericParamCount}, available: {sourceTypeArgs.Length}.", nameof(sourceType));
         Type[] typeArgsToUse = [.. sourceTypeArgs.Take(targetGenericParamCount)];
         return genericDefinition.MakeGenericType(typeArgsToUse);
     }
