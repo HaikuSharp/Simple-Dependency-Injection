@@ -14,6 +14,7 @@ public sealed class ReflectServiceController : ServiceController
 
     protected override void SetupDefaultServices()
     {
+        base.SetupDefaultServices();
         RegisterWeakInstance<IServiceDependencyResolver>(DEFAULT_SERVICE_KEY, ServiceDependencyResolver.Default);
         RegisterWeakInstance<IServiceConstructorResolver>(DEFAULT_SERVICE_KEY, ServiceDefaultConstructorResolver.Default);
     }
