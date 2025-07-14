@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace SDI.Exceptions;
+namespace SDI.Reflection.Exceptions;
 
 public class DefaultServiceConstructorNotFoundException(Type serviceImplementationType) : Exception($"Service implementation [{serviceImplementationType.FullName}] default constructor not found.")
 {
