@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
-namespace SDI.Activating;
+namespace SDI.Reflection.Activating;
 
 public sealed class GenericServiceActivator(Type serviceImplementationType) : IServiceInstanceActivator
 {

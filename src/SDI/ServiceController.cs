@@ -1,6 +1,6 @@
 ﻿using SDI.Abstraction;
+using SDI.Accessing;
 using SDI.Exceptions;
-using SDI.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,7 +49,13 @@ public abstract class ServiceController : IServiceController
         return provider;
     }
 
-    protected abstract void SetupDefaultServices();
+    protected virtual void SetupDefaultServices() => RegisterWeakInstance<IServiceController>(DEFAULT_SERVICE_KEY, this);
+
+    protected void RegisterInstance<TInstance>(object id, TInstance instance) => RegisterAccessor(new SingletonServiceAccessor(ServiceId.From<TInstance>(id), instance));
+
+    protected void RegisterWeakInstance<TInstance>(object id, TInstance instance) => RegisterAccessor(new WeakSingletonServiceAccessor(ServiceId.From<TInstance>(id), instance));
+
+    protected void UnregisterInstance<TInstance>(object id) => UnregisterService(ServiceId.From<TInstance>(id));
 
     private object GetService(ServiceId id, IServiceProvider provider) => m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(provider, id);
 

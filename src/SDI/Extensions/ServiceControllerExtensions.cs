@@ -1,5 +1,4 @@
 ﻿using SDI.Abstraction;
-using SDI.Activating;
 using SDI.Descripting;
 using SDI.Descripting.Lazy;
 using System;
@@ -8,18 +7,6 @@ namespace SDI.Extensions;
 
 public static class ServiceControllerExtensions
 {
-    public static void RegisterScopedService<TService, TImplementation>(this IServiceController controller, object key) where TService : class where TImplementation : class, TService => controller.RegisterScopedService(typeof(TService), key, typeof(TImplementation));
-
-    public static void RegisterTransientService<TService, TImplementation>(this IServiceController controller, object key) where TService : class where TImplementation : class, TService => controller.RegisterTransientService(typeof(TService), key, typeof(TImplementation));
-
-    public static void RegisterLazySingletonService<TService, TImplementation>(this IServiceController controller, object key) where TService : class where TImplementation : class, TService => controller.RegisterLazySingletonService(typeof(TService), key, typeof(TImplementation));
-
-    public static void RegisterScopedService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new ScopedServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
-
-    public static void RegisterTransientService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new TransientServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
-
-    public static void RegisterLazySingletonService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new LazySingletonServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
-
     public static void RegisterScopedService<TService>(this IServiceController controller, object key, IServiceInstanceActivator activator) where TService : class => controller.RegisterScopedService(typeof(TService), key, activator);
 
     public static void RegisterTransientService<TService>(this IServiceController controller, object key, IServiceInstanceActivator activator) where TService : class => controller.RegisterTransientService(typeof(TService), key, activator);
@@ -45,6 +32,4 @@ public static class ServiceControllerExtensions
     public static void RegisterSingletonService(this IServiceController controller, Type serviceType, object key, object instance) => controller.RegisterService(new SingletonServiceDescriptor(serviceType, key, instance));
 
     public static Abstraction.IServiceProvider CreateDefaultScope(this IServiceController controller) => controller.CreateScope(ScopeId.Default);
-
-    private static IServiceInstanceActivator GetServiceActivator(Type serviceImplementationType) => serviceImplementationType.IsGenericType && serviceImplementationType.ContainsGenericParameters ? new GenericServiceActivator(serviceImplementationType) : new DefaultConstructorServiceActivator(serviceImplementationType);
 }

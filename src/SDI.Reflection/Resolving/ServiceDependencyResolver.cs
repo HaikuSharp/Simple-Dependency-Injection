@@ -1,6 +1,6 @@
 ﻿using SDI.Abstraction;
 
-namespace SDI.Resolving;
+namespace SDI.Reflection.Resolving;
 
 public class ServiceDependencyResolver : IServiceDependencyResolver
 {

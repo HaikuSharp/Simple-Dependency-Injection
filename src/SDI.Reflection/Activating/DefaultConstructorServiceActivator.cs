@@ -3,7 +3,7 @@ using SDI.Extensions;
 using System;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
-namespace SDI.Activating;
+namespace SDI.Reflection.Activating;
 
 public sealed class DefaultConstructorServiceActivator(Type serviceImplementationType) : ConstructorServiceActivatorBase
 {

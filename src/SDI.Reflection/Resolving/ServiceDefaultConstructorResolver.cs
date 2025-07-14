@@ -1,10 +1,10 @@
 ﻿using SDI.Abstraction;
-using SDI.Activating.Constructing;
 using SDI.Exceptions;
+using SDI.Reflection.Activating.Constructing;
 using System;
 using System.Linq;
 
-namespace SDI.Resolving;
+namespace SDI.Reflection.Resolving;
 
 public class ServiceDefaultConstructorResolver : IServiceConstructorResolver
 {

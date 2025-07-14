@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace SDI.Activating.Constructing;
+namespace SDI.Reflection.Activating.Constructing;
 
 public sealed class ServiceConstructor(ConstructorInfo source) : ServiceConstructorBase<ConstructorInfo>(source)
 {

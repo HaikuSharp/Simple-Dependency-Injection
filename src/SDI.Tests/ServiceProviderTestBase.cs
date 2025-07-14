@@ -1,6 +1,8 @@
 ﻿using Microsoft.Testing.Platform.Services;
 using SDI.Abstraction;
 using SDI.Extensions;
+using SDI.Reflection;
+using SDI.Reflection.Extensions;
 using SDI.Tests.Services;
 using Sugar.Object.Extensions;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
@@ -13,7 +15,7 @@ public sealed class ServiceProviderTestBase
     [TestMethod]
     public void DoAccessTest()
     {
-        var controller = DefaultServiceController.Create();
+        var controller = ReflectServiceController.Create();
         Register(controller);
         Access(controller.CreateDefaultScope());
     }

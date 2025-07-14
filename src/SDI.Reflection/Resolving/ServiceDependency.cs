@@ -1,9 +1,9 @@
 ﻿using SDI.Abstraction;
-using SDI.Extensions;
+using SDI.Reflection.Extensions;
 using System;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
-namespace SDI.Resolving;
+namespace SDI.Reflection.Resolving;
 
 public class ServiceDependency(Type serviceType, object key) : IServiceDependency
 {

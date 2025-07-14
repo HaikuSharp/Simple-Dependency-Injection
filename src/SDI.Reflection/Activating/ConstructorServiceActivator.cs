@@ -1,7 +1,7 @@
 ﻿using SDI.Abstraction;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
-namespace SDI.Activating;
+namespace SDI.Reflection.Activating;
 
 public class ConstructorServiceActivator(IServiceConstructor constructor) : ConstructorServiceActivatorBase
 {

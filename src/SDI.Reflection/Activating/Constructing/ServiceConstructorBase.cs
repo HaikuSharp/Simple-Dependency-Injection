@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SDI.Activating.Constructing;
+namespace SDI.Reflection.Activating.Constructing;
 
 public abstract class ServiceConstructorBase<TMethod>(TMethod source) : IServiceConstructor where TMethod : MethodBase
 {
