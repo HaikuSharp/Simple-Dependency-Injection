@@ -11,7 +11,7 @@ public class ServiceDependency(Type serviceType, object key) : IServiceDependenc
     {
         ServiceId id = ServiceId.FromType(serviceType);
         if(provider.IsImplemented(id)) return provider.GetService(id);
-        var type = serviceType.GetElementType();
+        var type = InternalEnumerableExtensions.GetElementType(serviceType);
         return type is not null ? provider.GetServices(ServiceId.FromType(type, key)).ConvertToArray(type) : null;
     }
 }
