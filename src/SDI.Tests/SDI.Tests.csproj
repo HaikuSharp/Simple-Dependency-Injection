@@ -7,6 +7,11 @@
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+	</PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MSTest" Version="3.9.3" />
   </ItemGroup>

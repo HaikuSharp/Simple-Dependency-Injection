@@ -6,10 +6,15 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Reflection.Activating;
 
+/// <summary>
+/// Service activator that handles generic type instantiation by constructing concrete types
+/// from generic type definitions and caching the resulting activators.
+/// </summary>
 public sealed class GenericServiceActivator(Type serviceImplementationType) : IServiceInstanceActivator
 {
     private readonly Dictionary<Type, IServiceInstanceActivator> m_Activators = [];
 
+    /// <inheritdoc/>
     public object Activate(ServiceId requestedId, IServiceProvider provider) => GetOrCreateActivator(requestedId).Activate(requestedId, provider);
 
     private IServiceInstanceActivator GetOrCreateActivator(Type type)

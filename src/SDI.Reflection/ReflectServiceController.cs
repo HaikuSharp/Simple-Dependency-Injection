@@ -1,17 +1,14 @@
-﻿using SDI.Abstraction;
+﻿using SDI.Reflection.Abstraction;
 using SDI.Reflection.Resolving;
 
 namespace SDI.Reflection;
 
-public sealed class ReflectServiceController : ServiceController
+/// <summary>
+/// A service controller with reflection-based dependency resolution capabilities.
+/// </summary>
+public sealed class ReflectServiceController : ServiceControllerBase
 {
-    public static IServiceController Create()
-    {
-        ReflectServiceController controller = new();
-        controller.SetupDefaultServices();
-        return controller;
-    }
-
+    /// <inheritdoc/>
     protected override void SetupDefaultServices()
     {
         base.SetupDefaultServices();

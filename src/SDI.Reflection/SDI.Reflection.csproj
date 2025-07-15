@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	
 	<ItemGroup>
+		<ProjectReference Include="..\SDI.Reflection.Abstraction\SDI.Reflection.Abstraction.csproj" />
 		<ProjectReference Include="..\SDI\SDI.csproj" />
 	</ItemGroup>
 	

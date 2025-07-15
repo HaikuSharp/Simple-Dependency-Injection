@@ -9,18 +9,53 @@ using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI;
 
-public abstract class ServiceController : IServiceController
+/// <summary>
+/// Base class for service controllers that manage service registration and scope creation.
+/// </summary>
+public abstract class ServiceControllerBase : IServiceController
 {
+    /// <summary>
+    /// Delegate for service registration/unregistration events.
+    /// </summary>
+    /// <param name="id">The service identifier being registered or unregistered.</param>
     public delegate void ServiceRegisterHandler(ServiceId id);
 
+    /// <summary>
+    /// Default service key used for fundamental service registrations.
+    /// </summary>
     public const string DEFAULT_SERVICE_KEY = "default";
     private readonly List<IServiceAccessor> m_Accessors = [];
 
+    /// <summary>
+    /// Event raised when a new service is registered.
+    /// </summary>
     public event ServiceRegisterHandler OnServiceRegistered;
+
+    /// <summary>
+    /// Event raised when a service is unregistered.
+    /// </summary>
     public event ServiceRegisterHandler OnServiceUnregistered;
 
+    /// <summary>
+    /// Creates and initializes a new service controller of the specified type.
+    /// </summary>
+    /// <typeparam name="TController">
+    /// The type of controller to create, must inherit from <see cref="ServiceControllerBase"/> and have a parameterless constructor.
+    /// </typeparam>
+    /// <returns>
+    /// An initialized <typeparamref name="TController"/> instance with default services registered.
+    /// </returns>
+    public static TController Create<TController>() where TController : ServiceControllerBase, new()
+    {
+        TController controller = new();
+        controller.SetupDefaultServices();
+        return controller;
+    }
+
+    /// <inheritdoc/>
     public bool IsRegistered(ServiceId id) => m_Accessors.Any(a => a.CanAccess(id));
 
+    /// <inheritdoc/>
     public void RegisterService<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor
     {
         ServiceId id = ServiceId.FromDescriptor(descriptor);
@@ -29,6 +64,7 @@ public abstract class ServiceController : IServiceController
         OnServiceRegistered?.Invoke(id);
     }
 
+    /// <inheritdoc/>
     public void UnregisterService(ServiceId id)
     {
         var accessors = m_Accessors;
@@ -42,6 +78,7 @@ public abstract class ServiceController : IServiceController
         }
     }
 
+    /// <inheritdoc/>
     public IServiceProvider CreateScope(ScopeId id)
     {
         ServiceProvider provider = new(id, this);
@@ -49,23 +86,43 @@ public abstract class ServiceController : IServiceController
         return provider;
     }
 
+    /// <summary>
+    /// Sets up default services that should be available in all containers.
+    /// </summary>
     protected virtual void SetupDefaultServices() => RegisterWeakInstance<IServiceController>(DEFAULT_SERVICE_KEY, this);
 
+    /// <summary>
+    /// Registers a strongly-referenced singleton service instance.
+    /// </summary>
+    /// <typeparam name="TInstance">The service type.</typeparam>
+    /// <param name="id">The service identifier.</param>
+    /// <param name="instance">The service instance to register.</param>
     protected void RegisterInstance<TInstance>(object id, TInstance instance) => RegisterAccessor(new SingletonServiceAccessor(ServiceId.From<TInstance>(id), instance));
 
+    /// <summary>
+    /// Registers a weakly-referenced singleton service instance.
+    /// </summary>
+    /// <typeparam name="TInstance">The service type.</typeparam>
+    /// <param name="id">The service identifier.</param>
+    /// <param name="instance">The service instance to register.</param>
     protected void RegisterWeakInstance<TInstance>(object id, TInstance instance) => RegisterAccessor(new WeakSingletonServiceAccessor(ServiceId.From<TInstance>(id), instance));
 
+    /// <summary>
+    /// Unregisters a service instance by its identifier.
+    /// </summary>
+    /// <typeparam name="TInstance">The service type.</typeparam>
+    /// <param name="id">The service identifier.</param>
     protected void UnregisterInstance<TInstance>(object id) => UnregisterService(ServiceId.From<TInstance>(id));
+
+    internal void RegisterAccessor(IServiceAccessor accessor) => m_Accessors.Add(accessor);
 
     private object GetService(ServiceId id, IServiceProvider provider) => m_Accessors.FirstOrDefault(a => a.CanAccess(id))?.Access(provider, id);
 
     private IEnumerable GetServices(ServiceId id, IServiceProvider provider) => m_Accessors.Where(a => a.CanAccess(id)).Select(a => a.Access(provider, id));
 
-    internal void RegisterAccessor(IServiceAccessor accessor) => m_Accessors.Add(accessor);
-
-    private sealed class ServiceProvider(ScopeId scopeId, ServiceController controller) : IServiceProvider
+    private sealed class ServiceProvider(ScopeId scopeId, ServiceControllerBase controller) : IServiceProvider
     {
-        private readonly WeakReference<ServiceController> m_WeakController = new(controller);
+        private readonly WeakReference<ServiceControllerBase> m_WeakController = new(controller);
 
         public ScopeId Id => Container.Id;
 
@@ -113,7 +170,7 @@ public abstract class ServiceController : IServiceController
             controller.OnServiceUnregistered -= Container.Dispose;
         }
 
-        private ServiceController InternalGetController() => m_WeakController.TryGetTarget(out var controllerRef) ? controllerRef : null;
+        private ServiceControllerBase InternalGetController() => m_WeakController.TryGetTarget(out var controllerRef) ? controllerRef : null;
 
         private sealed class ServiceContainer(ScopeId id) : IServiceInstanceContainer
         {
@@ -130,7 +187,7 @@ public abstract class ServiceController : IServiceController
                 return instance;
             }
 
-            public object GetIsntance(ServiceId id) => m_Instances.FirstOrDefault(i => id == i.Id).Instance;
+            public object GetInstance(ServiceId id) => m_Instances.FirstOrDefault(i => id == i.Id).Instance;
 
             public void Dispose(ServiceId id)
             {

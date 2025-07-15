@@ -2,12 +2,7 @@
 
 namespace SDI;
 
-public sealed class DefaultServiceController : ServiceController
-{
-    public static IServiceController Create()
-    {
-        DefaultServiceController controller = new();
-        controller.SetupDefaultServices();
-        return controller;
-    }
-}
+/// <summary>
+/// Provides a default implementation of <see cref="IServiceController"/> with basic service registration capabilities.
+/// </summary>
+public sealed class DefaultServiceController : ServiceControllerBase;

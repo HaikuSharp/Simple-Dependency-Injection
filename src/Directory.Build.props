@@ -35,6 +35,7 @@
 
 	<PropertyGroup Condition="$(Configuration.StartsWith('Release'))">
 		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ProduceReferenceAssemblyInOutDir>True</ProduceReferenceAssemblyInOutDir>
 		<WarningLevel>9999</WarningLevel>
 		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
