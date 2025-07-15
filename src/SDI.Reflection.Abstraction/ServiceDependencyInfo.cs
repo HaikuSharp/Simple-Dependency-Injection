@@ -9,7 +9,7 @@ namespace SDI.Reflection.Abstraction;
 public readonly struct ServiceDependencyInfo(Type sourceType, ICustomAttributeProvider member) : IEquatable<ServiceDependencyInfo>
 {
     /// <summary>
-    /// Gets the type where the dependency originates from.
+    /// Gets the original dependency type.
     /// </summary>
     public Type SourceType => sourceType;
 

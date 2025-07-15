@@ -8,6 +8,11 @@ namespace SDI.Reflection.Abstraction;
 public interface IServiceDependency
 {
     /// <summary>
+    /// Get the dependency service id.
+    /// </summary>
+    public ServiceId Id { get; }
+
+    /// <summary>
     /// Resolves the dependency to a service instance using the specified provider.
     /// </summary>
     /// <param name="provider">The service provider to use for dependency resolution.</param>

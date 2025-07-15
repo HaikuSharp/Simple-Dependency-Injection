@@ -12,6 +12,9 @@ namespace SDI.Reflection.Resolving;
 public class ServiceDependency(Type serviceType, object key) : IServiceDependency
 {
     /// <inheritdoc/>
+    public ServiceId Id => ServiceId.FromType(serviceType, key);
+
+    /// <inheritdoc/>
     public object Resolve(IServiceProvider provider)
     {
         ServiceId id = ServiceId.FromType(serviceType);
