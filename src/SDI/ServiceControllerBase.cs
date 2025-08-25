@@ -24,7 +24,20 @@ public abstract class ServiceControllerBase : IServiceController
     /// Default service key used for fundamental service registrations.
     /// </summary>
     public const string DEFAULT_SERVICE_KEY = "default";
-    private readonly List<IServiceAccessor> m_Accessors = [];
+    private readonly List<IServiceAccessor> m_Accessors;
+    private readonly ServiceProvider m_RootScopeProvider;
+
+    /// <summary>
+    /// Initialize new <see cref="ServiceControllerBase"/>
+    /// </summary>
+    protected ServiceControllerBase()
+    {
+        m_Accessors = [];
+        m_RootScopeProvider = InternalCreateScope(Id);
+    }
+
+    /// <inheritdoc/>
+    public ScopeId Id => ScopeId.Default;
 
     /// <summary>
     /// Event raised when a new service is registered.
@@ -79,11 +92,25 @@ public abstract class ServiceControllerBase : IServiceController
     }
 
     /// <inheritdoc/>
-    public IServiceProvider CreateScope(ScopeId id)
+    public IServiceProvider CreateScope(ScopeId id) => InternalCreateScope(id);
+
+    /// <inheritdoc/>
+    public bool IsImplemented(ServiceId id) => IsRegistered(id);
+
+    /// <inheritdoc/>
+    public IEnumerable GetServices(ServiceId id) => m_RootScopeProvider.GetServices(id);
+
+    /// <inheritdoc/>
+    public object GetService(ServiceId id) => m_RootScopeProvider.GetService(id);
+
+    /// <inheritdoc/>
+    public object GetService(Type serviceType) => m_RootScopeProvider.GetService(serviceType);
+
+    /// <inheritdoc/>
+    public void Dispose()
     {
-        ServiceProvider provider = new(id, this);
-        provider.InternalInitialize();
-        return provider;
+        m_RootScopeProvider.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -120,15 +147,19 @@ public abstract class ServiceControllerBase : IServiceController
 
     private IEnumerable GetServices(ServiceId id, IServiceProvider provider) => m_Accessors.Where(a => a.CanAccess(id)).Select(a => a.Access(provider, id));
 
+    private ServiceProvider InternalCreateScope(ScopeId id)
+    {
+        ServiceProvider provider = new(id, this);
+        provider.InternalInitialize();
+        return provider;
+    }
+
     private sealed class ServiceProvider(ScopeId scopeId, ServiceControllerBase controller) : IServiceProvider
     {
         private readonly WeakReference<ServiceControllerBase> m_WeakController = new(controller);
+        private readonly ServiceContainer m_Container = new(scopeId);
 
-        public ScopeId Id => Container.Id;
-
-        public IServiceController Controller => InternalGetController();
-
-        public IServiceInstanceContainer Container { get; } = new ServiceContainer(scopeId);
+        public ScopeId Id => m_Container.Id;
 
         public bool IsImplemented(ServiceId id) => InternalGetController().IsRegistered(id);
 
@@ -141,7 +172,7 @@ public abstract class ServiceControllerBase : IServiceController
         public void Dispose()
         {
             InternalDeinitialize();
-            Container.Dispose();
+            m_Container.Dispose();
         }
 
         internal void InternalInitialize()
@@ -150,11 +181,11 @@ public abstract class ServiceControllerBase : IServiceController
             if(controller is null) return;
             var scopeId = Id;
 
-            controller.RegisterWeakInstance(scopeId, Container);
+            controller.RegisterWeakInstance(scopeId, m_Container);
             controller.RegisterWeakInstance<IServiceProvider>(scopeId, this);
             controller.RegisterWeakInstance<IServiceController>(scopeId, controller);
 
-            controller.OnServiceUnregistered += Container.Dispose;
+            controller.OnServiceUnregistered += m_Container.Dispose;
         }
 
         internal void InternalDeinitialize()
@@ -167,7 +198,7 @@ public abstract class ServiceControllerBase : IServiceController
             controller.UnregisterInstance<IServiceProvider>(scopeId);
             controller.UnregisterInstance<IServiceController>(scopeId);
 
-            controller.OnServiceUnregistered -= Container.Dispose;
+            controller.OnServiceUnregistered -= m_Container.Dispose;
         }
 
         private ServiceControllerBase InternalGetController() => m_WeakController.TryGetTarget(out var controllerRef) ? controllerRef : null;

@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents the central control point for service registration and scope management in the dependency injection system.
 /// </summary>
-public interface IServiceController
+public interface IServiceController : IServiceProvider
 {
     /// <summary>
     /// Determines whether a service with the specified identifier is currently registered.

@@ -15,16 +15,6 @@ public interface IServiceProvider : System.IServiceProvider, IDisposable
     ScopeId Id { get; }
 
     /// <summary>
-    /// Gets the controller responsible for managing service registrations in this scope.
-    /// </summary>
-    IServiceController Controller { get; }
-
-    /// <summary>
-    /// Gets the container that holds service instances for this scope.
-    /// </summary>
-    IServiceInstanceContainer Container { get; }
-
-    /// <summary>
     /// Determines whether the specified service is registered in the current scope.
     /// </summary>
     /// <param name="id">The service identifier to check.</param>
