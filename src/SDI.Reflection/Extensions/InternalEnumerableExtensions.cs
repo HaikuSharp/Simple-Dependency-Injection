@@ -1,5 +1,4 @@
-﻿using Sugar.Object.Extensions;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ internal static class InternalEnumerableExtensions
     internal static Array ConvertToArray(this IEnumerable source, Type itemType)
     {
         var buffer = s_Buffer ??= [];
-        foreach(object item in source) buffer.Add(item).Forget();
+        foreach(object item in source) _ = buffer.Add(item);
         Array array = Array.CreateInstance(itemType, buffer.Count);
         buffer.CopyTo(array);
         buffer.Clear();

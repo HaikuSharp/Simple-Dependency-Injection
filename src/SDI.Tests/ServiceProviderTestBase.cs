@@ -4,7 +4,6 @@ using SDI.Extensions;
 using SDI.Reflection;
 using SDI.Reflection.Extensions;
 using SDI.Tests.Services;
-using Sugar.Object.Extensions;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Tests;
@@ -40,8 +39,8 @@ public sealed class ServiceProviderTestBase
 
         Assert.AreNotEqual(serviceAInstance0, serviceAInstance1);
 
-        provider.GetRequiredService<IServiceB>("0").Forget();
-        provider.GetRequiredService<IServiceB>("1").Forget();
+        _ = provider.GetRequiredService<IServiceB>("0");
+        _ = provider.GetRequiredService<IServiceB>("1");
 
         var serviceCInstance0 = provider.GetRequiredService<IServiceC>();
         var serviceCInstance1 = provider.GetRequiredService<IServiceC>();
@@ -52,9 +51,9 @@ public sealed class ServiceProviderTestBase
         // When checking the registration, only ServiceType is taken into account,
         // so we need to specify unique keys,
         // otherwise Activator will not know which ImplementationType to use when substituting Generic arguments
-        provider.GetRequiredService<IServiceG<IServiceA, IServiceA>>("0").Forget();
-        provider.GetRequiredService<IServiceG<IServiceA, IServiceB>>("1").Forget();
+        _ = provider.GetRequiredService<IServiceG<IServiceA, IServiceA>>("0");
+        _ = provider.GetRequiredService<IServiceG<IServiceA, IServiceB>>("1");
 
-        provider.GetRequiredService("0").Forget();
+        _ = provider.GetRequiredService("0");
     }
 }
