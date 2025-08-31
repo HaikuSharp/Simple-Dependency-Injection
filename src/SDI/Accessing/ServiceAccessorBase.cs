@@ -12,15 +12,15 @@ public abstract class ServiceAccessorBase(ServiceId accessId) : IServiceAccessor
     /// Determines whether this accessor can provide the requested service.
     /// </summary>
     /// <param name="requestedId">The service identifier being requested.</param>
-    /// <returns>
-    /// <c>true</c> if:
-    /// <list type="bullet">
-    /// <item><description>The requested ID matches exactly, or</description></item>
-    /// <item><description>The requested ID is a closed generic that matches this open generic definition</description></item>
-    /// </list>
-    /// </returns>
-    public bool CanAccess(ServiceId requestedId) => requestedId == accessId || (requestedId.IsGeneric && requestedId.IsClosedGeneric && accessId.IsGeneric && !accessId.IsClosedGeneric && requestedId.GenericDefinition == accessId);
+    public bool CanAccess(ServiceId requestedId) => CanAccess(requestedId, accessId);
 
     /// <inheritdoc/>
     public abstract object Access(IServiceProvider provider, ServiceId requestedId);
+
+    /// <summary>
+    /// Determines whether this accessor can provide the requested service.
+    /// </summary>
+    /// <param name="requestedId">The service identifier being requested.</param>
+    /// <param name="accessId">The service identifier being providing.</param>
+    protected virtual bool CanAccess(ServiceId requestedId, ServiceId accessId) => requestedId == accessId
 }

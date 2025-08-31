@@ -15,6 +15,5 @@ public sealed class TransientServiceAccessor(ServiceId id, IServiceInstanceActiv
     /// <param name="provider">The service provider for dependency resolution.</param>
     /// <param name="requestedId">The service identifier being requested.</param>
     /// <returns>A new instance of the service each time it is accessed.</returns>
-    public override object Access(IServiceProvider provider, ServiceId requestedId)
-        => CreateInstance(requestedId, provider);
+    public override object Access(IServiceProvider provider, ServiceId requestedId) => CreateInstance(requestedId, provider);
 }

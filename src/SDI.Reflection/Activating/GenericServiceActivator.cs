@@ -15,15 +15,19 @@ public sealed class GenericServiceActivator(Type serviceImplementationType) : IS
     private readonly Dictionary<Type, IServiceInstanceActivator> m_Activators = [];
 
     /// <inheritdoc/>
-    public object Activate(ServiceId requestedId, IServiceProvider provider) => GetOrCreateActivator(requestedId).Activate(requestedId, provider);
+    public object Activate(ServiceId requestedId, IServiceProvider provider) => GetOrCreateActivator(requestedId.Type).Activate(requestedId, provider);
 
     private IServiceInstanceActivator GetOrCreateActivator(Type type)
     {
+#if NETCOREAPP
+        ArgumentNullException.ThrowIfNull(type);
+#else
+        if(type is null) throw new ArgumentNullException(nameof(type));
+#endif
         if(m_Activators.TryGetValue(type, out var activator)) return activator;
         var concreteType = type.IsGenericType ? ConstructConcreteType(type, serviceImplementationType) : serviceImplementationType;
         if(!type.IsAssignableFrom(concreteType)) throw new ArgumentException($"Type {concreteType.FullName} is not compatible with requested type {type.FullName}");
-        activator = new DefaultConstructorServiceActivator(concreteType);
-        m_Activators.Add(type, activator);
+        m_Activators.Add(type, activator = new DefaultConstructorServiceActivator(concreteType));
         return activator;
     }
 
@@ -31,8 +35,8 @@ public sealed class GenericServiceActivator(Type serviceImplementationType) : IS
     {
         var sourceTypeArgs = sourceType.GetGenericArguments();
         int targetGenericParamCount = genericDefinition.GetGenericArguments().Length;
-        if(targetGenericParamCount > sourceTypeArgs.Length) throw new ArgumentException($"Not enough type arguments in {sourceType.FullName} to construct {genericDefinition.FullName}. Required: {targetGenericParamCount}, available: {sourceTypeArgs.Length}.", nameof(sourceType));
-        Type[] typeArgsToUse = [.. sourceTypeArgs.Take(targetGenericParamCount)];
-        return genericDefinition.MakeGenericType(typeArgsToUse);
+        return targetGenericParamCount > sourceTypeArgs.Length
+            ? throw new ArgumentException($"Not enough type arguments in {sourceType.FullName} to construct {genericDefinition.FullName}. Required: {targetGenericParamCount}, available: {sourceTypeArgs.Length}.", nameof(sourceType))
+            : genericDefinition.MakeGenericType([.. sourceTypeArgs.Take(targetGenericParamCount)]);
     }
 }

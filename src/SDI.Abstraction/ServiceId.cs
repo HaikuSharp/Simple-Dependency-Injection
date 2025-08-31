@@ -1,5 +1,4 @@
-﻿using Sugar.Object;
-using System;
+﻿using System;
 
 namespace SDI.Abstraction;
 
@@ -8,34 +7,51 @@ namespace SDI.Abstraction;
 /// </summary>
 public readonly struct ServiceId : IEquatable<ServiceId>
 {
-    private readonly Type m_Type;
-    private readonly object m_Key;
+    private readonly ServiceType m_ServiceType;
+    private readonly ServiceKey m_ServiceKey;
 
     private ServiceId(Type type, object key)
     {
-        m_Type = type;
-        m_Key = key;
+        m_ServiceType = new(type);
+        m_ServiceKey = new(key);
     }
+
+    /// <summary>
+    /// Gets a service type.
+    /// </summary>
+    public Type Type => m_ServiceType.m_Type;
+
+    /// <summary>
+    /// Gets a service key.
+    /// </summary>
+    public object Key => m_ServiceKey.m_Key;
 
     /// <summary>
     /// Gets a value indicating whether the service type is generic.
     /// </summary>
-    public bool IsGeneric => m_Type.IsGenericType;
+    public bool IsGeneric => m_ServiceType.IsGeneric;
 
     /// <summary>
     /// Gets a value indicating whether the service type is a closed generic type (no open type parameters).
     /// </summary>
-    public bool IsClosedGeneric => !m_Type.ContainsGenericParameters;
+    public bool IsClosedGeneric => !m_ServiceType.IsClosedGeneric;
 
     /// <summary>
     /// Returns a new <see cref="ServiceId"/> with the same type but discards the key.
     /// </summary>
-    public ServiceId IgnoreKey => FromType(m_Type);
+    public ServiceId IgnoreKey => FromType(m_ServiceType);
 
     /// <summary>
     /// Returns a new <see cref="ServiceId"/> representing the generic type definition (if the current type is generic).
     /// </summary>
-    public ServiceId GenericDefinition => FromType(m_Type.GetGenericTypeDefinition(), m_Key);
+    public ServiceId GenericDefinition => FromType(m_ServiceType.GenericDefinition, m_ServiceKey);
+
+    /// <summary>
+    /// Creates a <see cref="ServiceId"/> from a key with no type.
+    /// </summary>
+    /// <param name="key">An optional key to distinguish multiple registrations of the same type.</param>
+    /// <returns>A new <see cref="ServiceId"/> instance.</returns>
+    public static ServiceId FromKey(object key) => FromType(null, key);
 
     /// <summary>
     /// Creates a <see cref="ServiceId"/> from a type with no key.
@@ -50,7 +66,7 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     /// <param name="type">The service type.</param>
     /// <param name="key">An optional key to distinguish multiple registrations of the same type.</param>
     /// <returns>A new <see cref="ServiceId"/> instance.</returns>
-    public static ServiceId FromType(Type type, object key) => new(type, key ?? AnyObject.Any);
+    public static ServiceId FromType(Type type, object key) => new(type, key);
 
     /// <summary>
     /// Creates a <see cref="ServiceId"/> from a service descriptor.
@@ -76,7 +92,7 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     public static ServiceId From<T>(object key) => FromType(typeof(T), key);
 
     /// <inheritdoc cref="IEquatable{ServiceId}.Equals(ServiceId)"/>
-    public bool Equals(ServiceId other) => m_Type.Equals(other.m_Type) && EqualsKeys(m_Key, other.m_Key);
+    public bool Equals(ServiceId other) => m_ServiceType == other.m_ServiceType && m_ServiceKey == other.m_ServiceKey;
 
     /// <inheritdoc/>
     public override bool Equals(object obj) => obj is ServiceId other && Equals(other);
@@ -85,15 +101,13 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     public override int GetHashCode()
     {
         int hashCode = 1193439425;
-        hashCode = (hashCode * -1521134295) + m_Type.GetHashCode();
-        hashCode = (hashCode * -1521134295) + m_Key.GetHashCode();
+        hashCode = (hashCode * -1521134295) + m_ServiceType.GetHashCode();
+        hashCode = (hashCode * -1521134295) + m_ServiceKey.GetHashCode();
         return hashCode;
     }
 
     /// <inheritdoc/>
-    public override string ToString() => $"({m_Type.FullName}, {m_Key})";
-
-    private static bool EqualsKeys(object left, object right) => left is not null ? left.Equals(right) : right is null || right.Equals(left);
+    public override string ToString() => $"({m_ServiceType}, {m_ServiceKey})";
 
     /// <inheritdoc/>
     public static bool operator ==(ServiceId left, ServiceId right) => left.Equals(right);
@@ -101,9 +115,47 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     /// <inheritdoc/>
     public static bool operator !=(ServiceId left, ServiceId right) => !(left == right);
 
-    /// <inheritdoc/>
-    public static implicit operator Type(ServiceId id) => id.m_Type;
+    private readonly struct ServiceKey(object key) : IEquatable<ServiceKey>
+    {
+        internal readonly object m_Key = key;
 
-    /// <inheritdoc/>
-    public static implicit operator ServiceId(Type type) => FromType(type);
+        public bool Equals(ServiceKey other) => m_Key is null || m_Key == other.m_Key;
+
+        public override bool Equals(object obj) => obj is ServiceKey key && Equals(key);
+
+        public override int GetHashCode() => m_Key?.GetHashCode() ?? 0;
+
+        public override string ToString() => m_Key?.ToString() ?? "AnyKey";
+
+        public static bool operator ==(ServiceKey left, ServiceKey right) => left.Equals(right);
+
+        public static bool operator !=(ServiceKey left, ServiceKey right) => !(left == right);
+    }
+
+    private readonly struct ServiceType(Type type) : IEquatable<ServiceType>
+    {
+        internal readonly Type m_Type = type;
+
+        public bool IsGeneric => m_Type.IsGenericType;
+
+        public bool IsClosedGeneric => !m_Type.ContainsGenericParameters;
+
+        public ServiceType GenericDefinition => new(m_Type.GetGenericTypeDefinition());
+
+        public bool Equals(ServiceType other) => m_Type is null || m_Type == other.m_Type;
+
+        public override bool Equals(object obj) => obj is ServiceType type && Equals(type);
+
+        public override int GetHashCode() => m_Type?.GetHashCode() ?? 0;
+
+        public override string ToString() => m_Type?.FullName ?? "AnyType";
+
+        public static bool operator ==(ServiceType left, ServiceType right) => left.Equals(right);
+
+        public static bool operator !=(ServiceType left, ServiceType right) => !(left == right);
+
+        public static implicit operator Type(ServiceType serviceType) => serviceType.m_Type;
+
+        public static implicit operator ServiceType(Type type) => new(type);
+    }
 }
