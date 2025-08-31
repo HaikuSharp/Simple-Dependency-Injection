@@ -5,12 +5,10 @@
     <OutputType>Exe</OutputType>
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+	  <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+	  <GenerateDocumentationFile>false</GenerateDocumentationFile>
+	  <ProduceReferenceAssemblyInOutDir>false</ProduceReferenceAssemblyInOutDir>
   </PropertyGroup>
-
-	<PropertyGroup>
-		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-		<GenerateDocumentationFile>False</GenerateDocumentationFile>
-	</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MSTest" Version="3.9.3" />
