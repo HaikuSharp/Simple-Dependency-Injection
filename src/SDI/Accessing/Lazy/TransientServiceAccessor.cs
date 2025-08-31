@@ -6,8 +6,7 @@ namespace SDI.Accessing.Lazy;
 /// <summary>
 /// Service accessor that creates a new service instance for each request (transient lifetime).
 /// </summary>
-public sealed class TransientServiceAccessor(ServiceId id, IServiceInstanceActivator activator)
-    : LazyServiceAccessorBase(id, activator)
+public sealed class TransientServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : LazyServiceAccessorBase(id, activator)
 {
     /// <summary>
     /// Creates and returns a new service instance for each access request.

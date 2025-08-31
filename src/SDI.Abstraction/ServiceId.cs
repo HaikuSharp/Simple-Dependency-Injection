@@ -34,7 +34,7 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     /// <summary>
     /// Gets a value indicating whether the service type is a closed generic type (no open type parameters).
     /// </summary>
-    public bool IsClosedGeneric => !m_ServiceType.IsClosedGeneric;
+    public bool IsClosedGeneric => m_ServiceType.IsClosedGeneric;
 
     /// <summary>
     /// Returns a new <see cref="ServiceId"/> with the same type but discards the key.
@@ -44,7 +44,7 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     /// <summary>
     /// Returns a new <see cref="ServiceId"/> representing the generic type definition (if the current type is generic).
     /// </summary>
-    public ServiceId GenericDefinition => FromType(m_ServiceType.GenericDefinition, m_ServiceKey);
+    public ServiceId GenericDefinition => FromType(m_ServiceType.GenericDefinition, m_ServiceKey.m_Key);
 
     /// <summary>
     /// Creates a <see cref="ServiceId"/> from a key with no type.
@@ -136,9 +136,9 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     {
         internal readonly Type m_Type = type;
 
-        public bool IsGeneric => m_Type.IsGenericType;
+        public bool IsGeneric => m_Type?.IsGenericType ?? false;
 
-        public bool IsClosedGeneric => !m_Type.ContainsGenericParameters;
+        public bool IsClosedGeneric => !m_Type?.ContainsGenericParameters ?? false;
 
         public ServiceType GenericDefinition => new(m_Type.GetGenericTypeDefinition());
 

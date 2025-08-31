@@ -15,9 +15,9 @@ public sealed class ServiceProviderTestBase
     [TestMethod]
     public void DoAccessTest()
     {
-        var controller = ServiceControllerBase.Create<ReflectServiceController>(); ;
+        var controller = ServiceControllerBase.Create<ReflectServiceController>();
         Register(controller);
-        Access(controller.CreateDefaultScope());
+        Access(controller);
     }
 
     private static void Register(IServiceController controller)
@@ -54,5 +54,7 @@ public sealed class ServiceProviderTestBase
         // otherwise Activator will not know which ImplementationType to use when substituting Generic arguments
         provider.GetRequiredService<IServiceG<IServiceA, IServiceA>>("0").Forget();
         provider.GetRequiredService<IServiceG<IServiceA, IServiceB>>("1").Forget();
+
+        provider.GetRequiredService("0").Forget();
     }
 }

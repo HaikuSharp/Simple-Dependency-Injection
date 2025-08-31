@@ -12,7 +12,7 @@ public class ScopeId(object id) : IEquatable<ScopeId>
     /// <summary>
     /// Gets the default scope identifier (with a null value).
     /// </summary>
-    public static ScopeId Default => new(null);
+    public static ScopeId Default => field ??= new(null);
 
     /// <inheritdoc cref="IEquatable{ScopeId}.Equals(ScopeId)"/>
     public bool Equals(ScopeId other) => m_Id == other.m_Id;

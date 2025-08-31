@@ -54,6 +54,20 @@ public static class RequiredServiceProviderExtension
     public static object GetRequiredService(this IServiceProvider provider, Type type) => provider.GetRequiredService(ServiceId.FromType(type));
 
     /// <summary>
+    /// Gets a required service with the specified key from the service provider.
+    /// </summary>
+    /// <param name="provider">The service provider.</param>
+    /// <param name="key">The key that identifies the service instance.</param>
+    /// <returns>The requested service instance.</returns>
+    /// <exception cref="ServiceNotImplementedException">
+    /// Thrown when the service is not registered in the provider.
+    /// </exception>
+    /// <exception cref="ServiceAccessException">
+    /// Thrown when the service instance could not be created or accessed.
+    /// </exception>
+    public static object GetRequiredService(this IServiceProvider provider, object key) => provider.GetRequiredService(ServiceId.FromKey(key));
+
+    /// <summary>
     /// Gets a required service of the specified type with the specified key from the service provider.
     /// </summary>
     /// <param name="provider">The service provider.</param>

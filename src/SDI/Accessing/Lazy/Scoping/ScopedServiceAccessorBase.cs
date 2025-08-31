@@ -23,7 +23,8 @@ public abstract class ScopedServiceAccessorBase(ServiceId id, IServiceInstanceAc
     /// </exception>
     public override object Access(IServiceProvider provider, ServiceId requestedId)
     {
-        var scope = ScopeNotCreatedExeption.ThrowIfNull(provider.GetScope(GetScopeId(provider)));
+        var id = GetScopeId(provider);
+        var scope = ScopeNotCreatedExeption.ThrowIfNull(provider.GetScope(id), id);
         return scope.HasInstance(requestedId) ? scope.GetInstance(requestedId) : scope.Create(requestedId, CreateInstance(requestedId, provider));
     }
 

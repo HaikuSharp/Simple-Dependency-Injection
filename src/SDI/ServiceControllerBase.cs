@@ -96,7 +96,7 @@ public abstract class ServiceControllerBase : IServiceController
     public IServiceProvider CreateScope(ScopeId id) => m_RootScopeProvider.GetService<IServiceProvider>(id) ?? InternalCreateScope(id);
 
     /// <inheritdoc/>
-    public bool IsImplemented(ServiceId id) => IsRegistered(id);
+    public bool IsImplemented(ServiceId id) => m_RootScopeProvider.IsImplemented(id);
 
     /// <inheritdoc/>
     public IEnumerable GetServices(ServiceId id) => m_RootScopeProvider.GetServices(id);
@@ -179,10 +179,12 @@ public abstract class ServiceControllerBase : IServiceController
         internal void InternalInitialize()
         {
             var controller = InternalGetController();
+
             if(controller is null) return;
+
             var scopeId = Id;
 
-            controller.RegisterWeakInstance(scopeId, m_Container);
+            controller.RegisterWeakInstance<IServiceInstanceContainer>(scopeId, m_Container);
             controller.RegisterWeakInstance<IServiceProvider>(scopeId, this);
             controller.RegisterWeakInstance<IServiceController>(scopeId, controller);
 

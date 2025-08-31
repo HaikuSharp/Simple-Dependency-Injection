@@ -38,6 +38,14 @@ public static class ServiceProviderExtension
     public static IEnumerable GetServices(this IServiceProvider provider, Type type) => provider.GetServices(ServiceId.FromType(type));
 
     /// <summary>
+    /// Gets all services with the specified key from the service provider.
+    /// </summary>
+    /// <param name="provider">The service provider.</param>
+    /// <param name="key">The key that identifies the services.</param>
+    /// <returns>An enumerable of service instances.</returns>
+    public static IEnumerable GetServices(this IServiceProvider provider, object key) => provider.GetServices(ServiceId.FromKey(key));
+
+    /// <summary>
     /// Gets all services of the specified type with the specified key from the service provider.
     /// </summary>
     /// <param name="provider">The service provider.</param>
@@ -70,6 +78,14 @@ public static class ServiceProviderExtension
     /// <param name="type">The type of service to resolve.</param>
     /// <returns>A service instance or null if not found.</returns>
     public static object GetService(this IServiceProvider provider, Type type) => provider.GetService(ServiceId.FromType(type));
+
+    /// <summary>
+    /// Gets a service with the specified key from the service provider.
+    /// </summary>
+    /// <param name="provider">The service provider.</param>
+    /// <param name="key">The key that identifies the service.</param>
+    /// <returns>A service instance or null if not found.</returns>
+    public static object GetService(this IServiceProvider provider, object key) => provider.GetService(ServiceId.FromKey(key));
 
     /// <summary>
     /// Gets a service of the specified type with the specified key from the service provider.

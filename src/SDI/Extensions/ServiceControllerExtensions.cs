@@ -115,11 +115,4 @@ public static class ServiceControllerExtensions
     /// <param name="key">The optional service key.</param>
     /// <param name="instance">The service instance to register.</param>
     public static void RegisterSingletonService(this IServiceController controller, Type serviceType, object key, object instance) => controller.RegisterService(new SingletonServiceDescriptor(serviceType, key, instance));
-
-    /// <summary>
-    /// Creates a new service scope with the default scope identifier.
-    /// </summary>
-    /// <param name="controller">The service controller.</param>
-    /// <returns>A new service provider instance representing the created scope.</returns>
-    public static Abstraction.IServiceProvider CreateDefaultScope(this IServiceController controller) => controller.CreateScope(ScopeId.Default);
 }
