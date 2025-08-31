@@ -22,5 +22,5 @@ public abstract class ServiceAccessorBase(ServiceId accessId) : IServiceAccessor
     /// </summary>
     /// <param name="requestedId">The service identifier being requested.</param>
     /// <param name="accessId">The service identifier being providing.</param>
-    protected virtual bool CanAccess(ServiceId requestedId, ServiceId accessId) => requestedId == accessId
+    protected virtual bool CanAccess(ServiceId requestedId, ServiceId accessId) => requestedId == accessId;
 }
