@@ -1,4 +1,5 @@
 ﻿using SDI.Abstraction;
+using SDI.Activating;
 using SDI.Descripting;
 using SDI.Descripting.Lazy;
 using System;
@@ -10,6 +11,33 @@ namespace SDI.Extensions;
 /// </summary>
 public static class ServiceControllerExtensions
 {
+    /// <summary>
+    /// Registers a scoped service with the specified activator.
+    /// </summary>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="serviceType">The service type to register.</param>
+    /// <param name="key">The optional service key.</param>
+    /// <param name="activator">The activator that will create service instances.</param>
+    public static void RegisterScopedService(this IServiceController controller, Type serviceType, object key, ScriptableServiceActivator.Activator activator) => controller.RegisterService(new ScopedServiceDescriptor(serviceType, key, new ScriptableServiceActivator(activator)));
+
+    /// <summary>
+    /// Registers a transient service with the specified activator.
+    /// </summary>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="serviceType">The service type to register.</param>
+    /// <param name="key">The optional service key.</param>
+    /// <param name="activator">The activator that will create service instances.</param>
+    public static void RegisterTransientService(this IServiceController controller, Type serviceType, object key, ScriptableServiceActivator.Activator activator) => controller.RegisterService(new TransientServiceDescriptor(serviceType, key, new ScriptableServiceActivator(activator)));
+
+    /// <summary>
+    /// Registers a lazy singleton service with the specified activator.
+    /// </summary>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="serviceType">The service type to register.</param>
+    /// <param name="key">The optional service key.</param>
+    /// <param name="activator">The activator that will create the singleton instance.</param>
+    public static void RegisterLazySingletonService(this IServiceController controller, Type serviceType, object key, ScriptableServiceActivator.Activator activator) => controller.RegisterService(new LazySingletonServiceDescriptor(serviceType, key, new ScriptableServiceActivator(activator)));
+
     /// <summary>
     /// Registers a scoped service with the specified activator.
     /// </summary>
