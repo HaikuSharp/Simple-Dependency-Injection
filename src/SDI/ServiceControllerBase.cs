@@ -1,6 +1,7 @@
 ﻿using SDI.Abstraction;
 using SDI.Accessing;
 using SDI.Exceptions;
+using SDI.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -92,7 +93,7 @@ public abstract class ServiceControllerBase : IServiceController
     }
 
     /// <inheritdoc/>
-    public IServiceProvider CreateScope(ScopeId id) => InternalCreateScope(id);
+    public IServiceProvider CreateScope(ScopeId id) => m_RootScopeProvider.GetService<IServiceProvider>(id) ?? InternalCreateScope(id);
 
     /// <inheritdoc/>
     public bool IsImplemented(ServiceId id) => IsRegistered(id);
