@@ -14,6 +14,34 @@ public static class ServiceControllerExtensions
     /// <summary>
     /// Registers a scoped service with the specified activator.
     /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    /// <param name="activator">The activator that will create service instances.</param>
+    public static void RegisterScopedService<TService>(this IServiceController controller, object key, ScriptableServiceActivator.Activator activator) where TService : class => controller.RegisterScopedService(typeof(TService), key, activator);
+
+    /// <summary>
+    /// Registers a transient service with the specified activator.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    /// <param name="activator">The activator that will create service instances.</param>
+    public static void RegisterTransientService<TService>(this IServiceController controller, object key, ScriptableServiceActivator.Activator activator) where TService : class => controller.RegisterTransientService(typeof(TService), key, activator);
+
+    /// <summary>
+    /// Registers a lazy singleton service with the specified activator.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    /// <param name="activator">The activator that will create the singleton instance.</param>
+    public static void RegisterLazySingletonService<TService>(this IServiceController controller, object key, ScriptableServiceActivator.Activator activator) where TService : class => controller.RegisterLazySingletonService(typeof(TService), key, activator);
+
+
+    /// <summary>
+    /// Registers a scoped service with the specified activator.
+    /// </summary>
     /// <param name="controller">The service controller.</param>
     /// <param name="serviceType">The service type to register.</param>
     /// <param name="key">The optional service key.</param>
