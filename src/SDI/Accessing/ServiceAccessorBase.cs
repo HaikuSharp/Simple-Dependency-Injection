@@ -15,7 +15,15 @@ public abstract class ServiceAccessorBase(ServiceId accessId) : IServiceAccessor
     public bool CanAccess(ServiceId requestedId) => CanAccess(requestedId, accessId);
 
     /// <inheritdoc/>
-    public abstract object Access(IServiceProvider provider, ServiceId requestedId);
+    public object Access(IServiceProvider provider, ServiceId requestedId) => Access(provider, requestedId, accessId);
+
+    /// <summary>
+    /// Determines whether this accessor can provide the requested service.
+    /// </summary>
+    /// <param name="provider">The service provider used for dependency resolution.</param>
+    /// <param name="requestedId">The service identifier to access.</param>
+    /// <param name="accessId">The service identifier being providing.</param>
+    protected abstract object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId);
 
     /// <summary>
     /// Determines whether this accessor can provide the requested service.

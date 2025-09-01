@@ -9,5 +9,5 @@ namespace SDI.Accessing;
 public sealed class SingletonServiceAccessor(ServiceId id, object instance) : ServiceAccessorBase(id)
 {
     /// <inheritdoc/>
-    public override object Access(IServiceProvider provider, ServiceId requestedId) => instance;
+    protected override object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId) => instance;
 }

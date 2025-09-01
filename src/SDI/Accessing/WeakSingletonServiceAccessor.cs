@@ -13,5 +13,5 @@ public sealed class WeakSingletonServiceAccessor(ServiceId id, object instance) 
     private readonly WeakReference<object> m_WeakInstance = new(instance);
 
     /// <inheritdoc/>
-    public override object Access(IServiceProvider provider, ServiceId requestedId) => m_WeakInstance.TryGetTarget(out object instanceRef) ? instanceRef : null;
+    protected override object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId) => m_WeakInstance.TryGetTarget(out object instanceRef) ? instanceRef : null;
 }

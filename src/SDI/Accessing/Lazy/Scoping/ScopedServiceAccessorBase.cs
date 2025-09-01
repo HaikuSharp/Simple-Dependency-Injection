@@ -10,22 +10,12 @@ namespace SDI.Accessing.Lazy.Scoping;
 /// </summary>
 public abstract class ScopedServiceAccessorBase(ServiceId id, IServiceInstanceActivator activator) : LazyServiceAccessorBase(id, activator)
 {
-    /// <summary>
-    /// Provides access to a scoped service instance, creating it if it doesn't exist in the current scope.
-    /// </summary>
-    /// <param name="provider">The service provider for dependency resolution.</param>
-    /// <param name="requestedId">The service identifier being requested.</param>
-    /// <returns>
-    /// The service instance for the current scope - either existing or newly created.
-    /// </returns>
-    /// <exception cref="ScopeNotCreatedExeption">
-    /// Thrown when the required scope cannot be accessed.
-    /// </exception>
-    public override object Access(IServiceProvider provider, ServiceId requestedId)
+    /// <inheritdoc/>
+    protected override object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId)
     {
         var id = GetScopeId(provider);
         var scope = ScopeNotCreatedExeption.ThrowIfNull(provider.GetScope(id), id);
-        return scope.HasInstance(requestedId) ? scope.GetInstance(requestedId) : scope.Create(requestedId, CreateInstance(requestedId, provider));
+        return scope.HasInstance(accessId) ? scope.GetInstance(accessId) : scope.Create(accessId, CreateInstance(requestedId, provider));
     }
 
     /// <summary>
