@@ -15,6 +15,30 @@ public static class ServiceControllerExtensions
     /// Registers a scoped standalone service with the specified implementation type.
     /// </summary>
     /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    public static void RegisterScopedStandaloneService<TService>(this IServiceController controller, object key) where TService : class, new() => controller.RegisterScopedStandaloneService<TService, TService>(key);
+
+    /// <summary>
+    /// Registers a transient standalone service with the specified implementation type.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    public static void RegisterTransientStandaloneService<TService>(this IServiceController controller, object key) where TService : class, new() => controller.RegisterTransientStandaloneService<TService, TService>(key);
+
+    /// <summary>
+    /// Registers a lazy singleton standalone service with the specified implementation type.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    public static void RegisterLazySingletonStandaloneService<TService>(this IServiceController controller, object key) where TService : class, new() => controller.RegisterLazySingletonStandaloneService<TService, TService>(key);
+
+    /// <summary>
+    /// Registers a scoped standalone service with the specified implementation type.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
     /// <typeparam name="TImplementation">The implementation type that must have a parameterless constructor.</typeparam>
     /// <param name="controller">The service controller.</param>
     /// <param name="key">The optional service key.</param>
@@ -64,7 +88,6 @@ public static class ServiceControllerExtensions
     /// <param name="key">The optional service key.</param>
     /// <param name="activator">The activator that will create the singleton instance.</param>
     public static void RegisterLazySingletonService<TService>(this IServiceController controller, object key, ScriptableServiceActivator.Activator activator) where TService : class => controller.RegisterLazySingletonService(typeof(TService), key, activator);
-
 
     /// <summary>
     /// Registers a scoped service with the specified activator.

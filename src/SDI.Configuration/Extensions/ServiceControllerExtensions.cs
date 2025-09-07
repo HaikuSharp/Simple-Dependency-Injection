@@ -13,6 +13,30 @@ public static class ServiceControllerExtensions
     /// Registers a scoped configurable service with the specified implementation type.
     /// </summary>
     /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    public static void RegisterScopedConfigurableService<TService>(this IServiceController controller, object key) where TService : class, IConfigurableService, new() => controller.RegisterScopedConfigurableService<TService, TService>(key);
+
+    /// <summary>
+    /// Registers a transient configurable service with the specified implementation type.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    public static void RegisterTransientConfigurableService<TService>(this IServiceController controller, object key) where TService : class, IConfigurableService, new() => controller.RegisterTransientConfigurableService<TService, TService>(key);
+
+    /// <summary>
+    /// Registers a lazy singleton configurable service with the specified implementation type.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
+    /// <param name="controller">The service controller.</param>
+    /// <param name="key">The optional service key.</param>
+    public static void RegisterLazySingletonConfigurableService<TService>(this IServiceController controller, object key) where TService : class, IConfigurableService, new() => controller.RegisterLazySingletonConfigurableService<TService, TService>(key);
+
+    /// <summary>
+    /// Registers a scoped configurable service with the specified implementation type.
+    /// </summary>
+    /// <typeparam name="TService">The service type to register.</typeparam>
     /// <typeparam name="TImplementation">The implementation type that must be configurable.</typeparam>
     /// <param name="controller">The service controller.</param>
     /// <param name="key">The optional service key.</param>

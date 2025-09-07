@@ -10,7 +10,7 @@ public interface IServiceDependency
     /// <summary>
     /// Get the dependency service id.
     /// </summary>
-    public ServiceId Id { get; }
+    ServiceId Id { get; }
 
     /// <summary>
     /// Resolves the dependency to a service instance using the specified provider.
