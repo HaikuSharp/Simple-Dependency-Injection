@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDI.Reflection", "SDI.Refle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDI.Reflection.Abstraction", "SDI.Reflection.Abstraction\SDI.Reflection.Abstraction.csproj", "{2DC3796D-FF05-4135-B763-CA4F512DFA57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDI.Configuration", "SDI.Configuration\SDI.Configuration.csproj", "{3B792570-F382-4216-81AA-67C4380BF60F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{2DC3796D-FF05-4135-B763-CA4F512DFA57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DC3796D-FF05-4135-B763-CA4F512DFA57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DC3796D-FF05-4135-B763-CA4F512DFA57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B792570-F382-4216-81AA-67C4380BF60F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B792570-F382-4216-81AA-67C4380BF60F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B792570-F382-4216-81AA-67C4380BF60F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B792570-F382-4216-81AA-67C4380BF60F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
