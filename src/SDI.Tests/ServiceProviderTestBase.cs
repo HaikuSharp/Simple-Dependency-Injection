@@ -14,19 +14,19 @@ public sealed class ServiceProviderTestBase
     [TestMethod]
     public void DoAccessTest()
     {
-        var controller = ServiceControllerBase.Create<ReflectServiceController>();
+        var controller = ServiceController.Create<ReflectServiceController>();
         Register(controller);
         Access(controller);
     }
 
     private static void Register(IServiceController controller)
     {
-        controller.RegisterTransientService<IServiceA, ServiceA>(ServiceControllerBase.DEFAULT_SERVICE_KEY);
+        controller.RegisterTransientService<IServiceA, ServiceA>(ServiceController.DEFAULT_SERVICE_KEY);
 
         controller.RegisterLazySingletonService<IServiceB, ServiceB0>("0");
         controller.RegisterLazySingletonService<IServiceB, ServiceB1>("1");
 
-        controller.RegisterLazySingletonService<IServiceC, ServiceC>(ServiceControllerBase.DEFAULT_SERVICE_KEY);
+        controller.RegisterLazySingletonService<IServiceC, ServiceC>(ServiceController.DEFAULT_SERVICE_KEY);
 
         controller.RegisterTransientService(typeof(IServiceG<,>), "0", typeof(ServiceG0<>));
         controller.RegisterTransientService(typeof(IServiceG<,>), "1", typeof(ServiceG1<>));

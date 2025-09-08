@@ -9,7 +9,7 @@ namespace SDI.Reflection.Resolving;
 /// <summary>
 /// Represents a dependency that can resolve either a single service or a collection of services.
 /// </summary>
-public class ServiceDependency(Type serviceType, object key) : IServiceDependency
+public sealed class ServiceDependency(Type serviceType, object key) : IServiceDependency
 {
     /// <inheritdoc/>
     public ServiceId Id => ServiceId.FromType(serviceType, key);

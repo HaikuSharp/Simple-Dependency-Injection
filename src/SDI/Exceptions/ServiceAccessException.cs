@@ -6,7 +6,7 @@ namespace SDI.Exceptions;
 /// <summary>
 /// The exception that is thrown when a service instance cannot be accessed or is null.
 /// </summary>
-public class ServiceAccessException(ServiceId id) : NullReferenceException($"Service [id: {id}] instance can't be null.")
+public sealed class ServiceAccessException(ServiceId id) : NullReferenceException($"Service [id: {id}] instance can't be null.")
 {
     /// <summary>
     /// Throws a <see cref="ServiceAccessException"/> if the specified service instance is null.

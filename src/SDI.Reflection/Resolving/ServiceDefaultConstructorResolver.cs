@@ -9,7 +9,7 @@ namespace SDI.Reflection.Resolving;
 /// <summary>
 /// Resolves service constructors by selecting the one with the fewest parameters (greedy constructor resolution).
 /// </summary>
-public class ServiceDefaultConstructorResolver : IServiceConstructorResolver
+public sealed class ServiceDefaultConstructorResolver : IServiceConstructorResolver
 {
     /// <summary>
     /// The default singleton instance of the constructor resolver.

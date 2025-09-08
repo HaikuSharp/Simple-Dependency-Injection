@@ -6,7 +6,7 @@ namespace SDI.Reflection.Resolving;
 /// Default implementation of <see cref="IServiceDependencyResolver"/> that creates
 /// service dependencies without key-based resolution.
 /// </summary>
-public class ServiceDependencyResolver : IServiceDependencyResolver
+public sealed class ServiceDependencyResolver : IServiceDependencyResolver
 {
     /// <summary>
     /// The default singleton instance of the dependency resolver.

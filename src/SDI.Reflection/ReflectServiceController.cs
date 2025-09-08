@@ -6,7 +6,7 @@ namespace SDI.Reflection;
 /// <summary>
 /// A service controller with reflection-based dependency resolution capabilities.
 /// </summary>
-public sealed class ReflectServiceController : ServiceControllerBase
+public class ReflectServiceController : ServiceController
 {
     /// <inheritdoc/>
     protected override void SetupDefaultServices()

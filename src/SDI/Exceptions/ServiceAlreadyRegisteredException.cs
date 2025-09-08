@@ -6,7 +6,7 @@ namespace SDI.Exceptions;
 /// <summary>
 /// The exception that is thrown when attempting to register a service that already exists in the container.
 /// </summary>
-public class ServiceAlreadyRegisteredException(ServiceId id) : Exception($"Service with [id: {id}] is already registered.")
+public sealed class ServiceAlreadyRegisteredException(ServiceId id) : Exception($"Service with [id: {id}] is already registered.")
 {
     /// <summary>
     /// Throws a <see cref="ServiceAlreadyRegisteredException"/> if the specified service is already registered.

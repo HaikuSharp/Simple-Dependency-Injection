@@ -6,7 +6,7 @@ namespace SDI.Exceptions;
 /// <summary>
 /// The exception that is thrown when attempting to add a duplicate service instance to a container.
 /// </summary>
-public class ServiceInstanceAlreadyAddedException(ServiceId id) : Exception($"Service with [id: {id}] is already added.")
+public sealed class ServiceInstanceAlreadyAddedException(ServiceId id) : Exception($"Service with [id: {id}] is already added.")
 {
     /// <summary>
     /// Throws a <see cref="ServiceInstanceAlreadyAddedException"/> if the container already contains the specified service instance.

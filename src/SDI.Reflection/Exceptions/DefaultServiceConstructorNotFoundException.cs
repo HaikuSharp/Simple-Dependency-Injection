@@ -6,7 +6,7 @@ namespace SDI.Reflection.Exceptions;
 /// <summary>
 /// The exception that is thrown when a default constructor cannot be found for a service implementation type.
 /// </summary>
-public class DefaultServiceConstructorNotFoundException(Type serviceImplementationType) : Exception($"Service implementation [{serviceImplementationType.FullName}] default constructor not found.")
+public sealed class DefaultServiceConstructorNotFoundException(Type serviceImplementationType) : Exception($"Service implementation [{serviceImplementationType.FullName}] default constructor not found.")
 {
     /// <summary>
     /// Throws a <see cref="DefaultServiceConstructorNotFoundException"/> if the specified constructor is null.
@@ -18,7 +18,5 @@ public class DefaultServiceConstructorNotFoundException(Type serviceImplementati
     /// <exception cref="DefaultServiceConstructorNotFoundException">
     /// Thrown when <paramref name="constructor"/> is null.
     /// </exception>
-    public static TConstructor ThrowIfNull<TConstructor>(TConstructor constructor, Type type)
-        where TConstructor : MethodBase
-        => constructor is not null ? constructor : throw new DefaultServiceConstructorNotFoundException(type);
+    public static TConstructor ThrowIfNull<TConstructor>(TConstructor constructor, Type type) where TConstructor : MethodBase => constructor is not null ? constructor : throw new DefaultServiceConstructorNotFoundException(type);
 }

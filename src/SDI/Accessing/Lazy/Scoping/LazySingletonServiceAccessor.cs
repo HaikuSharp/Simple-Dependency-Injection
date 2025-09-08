@@ -7,7 +7,7 @@ namespace SDI.Accessing.Lazy.Scoping;
 /// Service accessor that provides lazy-initialized singleton behavior,
 /// creating and caching the instance on first access and reusing it for all subsequent requests.
 /// </summary>
-public class LazySingletonServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : ScopedServiceAccessorBase(id, activator)
+public sealed class LazySingletonServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : ScopedServiceAccessorBase(id, activator)
 {
     /// <summary>
     /// Returns the default scope identifier to ensure singleton behavior across all requests.

@@ -7,7 +7,7 @@ namespace SDI.Descripting.Lazy;
 /// <summary>
 /// Descriptor for a transient service that creates a new instance for each request.
 /// </summary>
-public class TransientServiceDescriptor(Type serviceType, object key, IServiceInstanceActivator activator) : LazyServiceDescriptorBase(serviceType, key, activator)
+public sealed class TransientServiceDescriptor(Type serviceType, object key, IServiceInstanceActivator activator) : LazyServiceDescriptorBase(serviceType, key, activator)
 {
     /// <inheritdoc/>
     protected override IServiceAccessor CreateAccessor(ServiceId id, IServiceInstanceActivator activator) => new TransientServiceAccessor(id, activator);

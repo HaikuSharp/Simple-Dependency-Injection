@@ -13,7 +13,7 @@ namespace SDI;
 /// <summary>
 /// Base class for service controllers that manage service registration and scope creation.
 /// </summary>
-public abstract class ServiceControllerBase : IServiceController
+public class ServiceController : IServiceController
 {
     /// <summary>
     /// Delegate for service registration/unregistration events.
@@ -29,9 +29,9 @@ public abstract class ServiceControllerBase : IServiceController
     private readonly ServiceProvider m_RootScopeProvider;
 
     /// <summary>
-    /// Initialize new <see cref="ServiceControllerBase"/>
+    /// Initialize new <see cref="ServiceController"/>
     /// </summary>
-    protected ServiceControllerBase()
+    public ServiceController()
     {
         m_Accessors = [];
         m_RootScopeProvider = InternalCreateScope(Id);
@@ -54,12 +54,12 @@ public abstract class ServiceControllerBase : IServiceController
     /// Creates and initializes a new service controller of the specified type.
     /// </summary>
     /// <typeparam name="TController">
-    /// The type of controller to create, must inherit from <see cref="ServiceControllerBase"/> and have a parameterless constructor.
+    /// The type of controller to create, must inherit from <see cref="ServiceController"/> and have a parameterless constructor.
     /// </typeparam>
     /// <returns>
     /// An initialized <typeparamref name="TController"/> instance with default services registered.
     /// </returns>
-    public static TController Create<TController>() where TController : ServiceControllerBase, new()
+    public static TController Create<TController>() where TController : ServiceController, new()
     {
         TController controller = new();
         controller.SetupDefaultServices();
@@ -155,9 +155,9 @@ public abstract class ServiceControllerBase : IServiceController
         return provider;
     }
 
-    private sealed class ServiceProvider(ScopeId scopeId, ServiceControllerBase controller) : IServiceProvider
+    private sealed class ServiceProvider(ScopeId scopeId, ServiceController controller) : IServiceProvider
     {
-        private readonly WeakReference<ServiceControllerBase> m_WeakController = new(controller);
+        private readonly WeakReference<ServiceController> m_WeakController = new(controller);
         private readonly ServiceContainer m_Container = new(scopeId);
 
         public ScopeId Id => m_Container.Id;
@@ -204,7 +204,7 @@ public abstract class ServiceControllerBase : IServiceController
             controller.OnServiceUnregistered -= m_Container.Dispose;
         }
 
-        private ServiceControllerBase InternalGetController() => m_WeakController.TryGetTarget(out var controllerRef) ? controllerRef : null;
+        private ServiceController InternalGetController() => m_WeakController.TryGetTarget(out var controllerRef) ? controllerRef : null;
 
         private sealed class ServiceContainer(ScopeId id) : IServiceInstanceContainer
         {

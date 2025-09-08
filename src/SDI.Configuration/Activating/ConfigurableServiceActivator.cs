@@ -11,7 +11,7 @@ public sealed class ConfigurableServiceActivator<TService> : IServiceInstanceAct
     /// <summary>
     /// Gets the default instance of the configurable service activator.
     /// </summary>
-    public static ConfigurableServiceActivator<TService> Default { get; } = new ConfigurableServiceActivator<TService>();
+    public static ConfigurableServiceActivator<TService> Default => field ??= new ConfigurableServiceActivator<TService>();
 
     /// <inheritdoc/>
     public object Activate(ServiceId requestedId, IServiceProvider provider)

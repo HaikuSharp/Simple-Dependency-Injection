@@ -6,7 +6,7 @@ namespace SDI.Accessing.Lazy.Scoping;
 /// <summary>
 /// Service accessor that maintains one service instance per provider scope.
 /// </summary>
-public class ScopedServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : ScopedServiceAccessorBase(id, activator)
+public sealed class ScopedServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : ScopedServiceAccessorBase(id, activator)
 {
     /// <summary>
     /// Gets the scope identifier from the current service provider.
