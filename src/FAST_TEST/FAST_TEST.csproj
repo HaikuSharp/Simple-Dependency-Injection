@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\Generated</CompilerGeneratedFilesOutputPath>
+		<IncludeCompilerGeneratedFilesInProject>true</IncludeCompilerGeneratedFilesInProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SDI.Abstraction\SDI.Abstraction.csproj" />
+		<ProjectReference Include="..\SDI.Configuration\SDI.Configuration.csproj" />
+		<ProjectReference Include="..\SDI.SCG.Attributes\SDI.SCG.Attributes.csproj" />
+		<ProjectReference Include="..\SDI.SCG\SDI.SCG.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\SDI\SDI.csproj" />
+	</ItemGroup>
+
+</Project>
