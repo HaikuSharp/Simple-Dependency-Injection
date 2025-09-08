@@ -82,13 +82,13 @@ public class ServiceController : IServiceController
     public void UnregisterService(ServiceId id)
     {
         var accessors = m_Accessors;
-        for(int i = 0; i < accessors.Count; i++)
+
+        for(int i = accessors.Count - 1; i >= 0; i--)
         {
             var accessor = accessors[i];
             if(!accessor.CanAccess(id)) continue;
             accessors.RemoveAt(i);
             OnServiceUnregistered?.Invoke(id);
-            break;
         }
     }
 
