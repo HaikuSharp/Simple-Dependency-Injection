@@ -27,13 +27,4 @@ public interface IServiceController : IServiceProvider
     /// </summary>
     /// <param name="id">The service identifier to unregister.</param>
     void UnregisterService(ServiceId id);
-
-    /// <summary>
-    /// Creates a new service provider scope with the specified identifier.
-    /// </summary>
-    /// <param name="id">The unique identifier for the new scope.</param>
-    /// <returns>
-    /// A new <see cref="IServiceProvider"/> instance representing the created scope.
-    /// </returns>
-    IServiceProvider CreateScope(ScopeId id);
 }

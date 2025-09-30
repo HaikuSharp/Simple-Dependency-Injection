@@ -170,6 +170,8 @@ public class ServiceController : IServiceController
 
         public IEnumerable GetServices(ServiceId id) => InternalGetController().GetServices(id, this);
 
+        public IServiceProvider CreateScope(ScopeId id) => InternalGetController().CreateScope(id);
+
         public void Dispose()
         {
             InternalDeinitialize();
