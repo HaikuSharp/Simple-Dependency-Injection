@@ -140,7 +140,7 @@ public readonly struct ServiceId : IEquatable<ServiceId>
 
         public bool IsClosedGeneric => !m_Type?.ContainsGenericParameters ?? false;
 
-        public ServiceType GenericDefinition => new(m_Type.GetGenericTypeDefinition());
+        public ServiceType GenericDefinition => new(m_Type?.GetGenericTypeDefinition());
 
         public bool Equals(ServiceType other) => m_Type is null || m_Type == other.m_Type;
 

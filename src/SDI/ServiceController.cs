@@ -162,13 +162,15 @@ public class ServiceController : IServiceController
 
         public ScopeId Id => m_Container.Id;
 
-        public bool IsImplemented(ServiceId id) => InternalGetController().IsRegistered(id);
+        private ServiceController Controller => m_WeakController.TryGetTarget(out var controller) ? controller : throw new ObjectDisposedException(nameof(controller), "Operation unavailable. The specified Controller has been disposed.");
+
+        public bool IsImplemented(ServiceId id) => Controller().IsRegistered(id);
 
         public object GetService(Type serviceType) => GetService(ServiceId.FromType(serviceType));
 
-        public object GetService(ServiceId id) => InternalGetController().GetService(id, this);
+        public object GetService(ServiceId id) => Controller().GetService(id, this);
 
-        public IEnumerable GetServices(ServiceId id) => InternalGetController().GetServices(id, this);
+        public IEnumerable GetServices(ServiceId id) => Controller().GetServices(id, this);
 
         public void Dispose()
         {
@@ -178,7 +180,7 @@ public class ServiceController : IServiceController
 
         internal void InternalInitialize()
         {
-            var controller = InternalGetController();
+            var controller = Controller();
 
             if(controller is null) return;
 
@@ -193,7 +195,7 @@ public class ServiceController : IServiceController
 
         internal void InternalDeinitialize()
         {
-            var controller = InternalGetController();
+            var controller = Controller();
             if(controller is null) return;
             var scopeId = Id;
 
@@ -203,8 +205,6 @@ public class ServiceController : IServiceController
 
             controller.OnServiceUnregistered -= m_Container.Dispose;
         }
-
-        private ServiceController InternalGetController() => m_WeakController.TryGetTarget(out var controllerRef) ? controllerRef : null;
 
         private sealed class ServiceContainer(ScopeId id) : IServiceInstanceContainer
         {

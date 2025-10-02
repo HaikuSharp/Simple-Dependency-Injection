@@ -5,7 +5,7 @@ namespace SDI.Abstraction;
 /// <summary>
 /// Represents a scope identifier that can be used to distinguish different dependency injection scopes.
 /// </summary>
-public class ScopeId(object id) : IEquatable<ScopeId>
+public sealed class ScopeId(object id) : IEquatable<ScopeId>
 {
     private readonly object m_Id = id;
 
@@ -13,6 +13,12 @@ public class ScopeId(object id) : IEquatable<ScopeId>
     /// Gets the default scope identifier (with a null value).
     /// </summary>
     public static ScopeId Default => field ??= new(null);
+
+    /// <summary>
+    /// Сreates a new unique scope id.
+    /// </summary>
+    /// <returns>New unique scope id</returns>
+    public static ScopeId Create() => new(new());
 
     /// <inheritdoc cref="IEquatable{ScopeId}.Equals(ScopeId)"/>
     public bool Equals(ScopeId other) => m_Id == other.m_Id;

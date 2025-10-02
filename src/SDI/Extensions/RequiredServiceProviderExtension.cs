@@ -22,7 +22,10 @@ public static class RequiredServiceProviderExtension
     /// <exception cref="ServiceAccessException">
     /// Thrown when the service instance could not be created or accessed.
     /// </exception>
-    public static T GetRequiredService<T>(this IServiceProvider provider) where T : class => provider.GetRequiredService(ServiceId.From<T>()) as T;
+    /// <exception cref="InvalidCastException">
+    /// Thrown when the service type is not <typeparamref name="T"/>
+    /// </exception>
+    public static T GetRequiredService<T>(this IServiceProvider provider) where T : class => ServiceCast<T>(provider.GetRequiredService(ServiceId.From<T>()));
 
     /// <summary>
     /// Gets a required service of type <typeparamref name="T"/> with the specified key from the service provider.
@@ -37,7 +40,10 @@ public static class RequiredServiceProviderExtension
     /// <exception cref="ServiceAccessException">
     /// Thrown when the service instance could not be created or accessed.
     /// </exception>
-    public static T GetRequiredService<T>(this IServiceProvider provider, object key) where T : class => provider.GetRequiredService(ServiceId.From<T>(key)) as T;
+    /// <exception cref="InvalidCastException">
+    /// Thrown when the service type is not <typeparamref name="T"/>
+    /// </exception>
+    public static T GetRequiredService<T>(this IServiceProvider provider, object key) where T : class => ServiceCast<T>(provider.GetRequiredService(ServiceId.From<T>(key)));
 
     /// <summary>
     /// Gets a required service of the specified type from the service provider.
@@ -101,4 +107,6 @@ public static class RequiredServiceProviderExtension
         ServiceAccessException.ThrowIfServiceInstanceIsNull(id, instance);
         return instance;
     }
+
+    private static T ServiceCast<T>(object service) where T : class => service is T tservice ? tservice : throw new InvalidCastException($"The service type ({service.GetType().FullName}) does not match the requested one ({typeof(T).FullName}).");
 }
