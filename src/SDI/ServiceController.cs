@@ -73,6 +73,7 @@ public class ServiceController : IServiceController
     public void RegisterService<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor
     {
         ServiceId id = ServiceId.FromDescriptor(descriptor);
+        InvalidServiceTypeException.ThrowIfTypeIsNull(id);
         ServiceAlreadyRegisteredException.ThrowIfRegistered(this, id);
         RegisterAccessor(descriptor.CreateAccessor());
         OnServiceRegistered?.Invoke(id);

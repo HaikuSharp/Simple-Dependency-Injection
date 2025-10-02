@@ -136,6 +136,8 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     {
         internal readonly Type m_Type = type;
 
+        public bool IsNull => m_Type is null;
+
         public bool IsGeneric => m_Type?.IsGenericType ?? false;
 
         public bool IsClosedGeneric => !m_Type?.ContainsGenericParameters ?? false;
