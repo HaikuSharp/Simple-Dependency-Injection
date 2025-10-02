@@ -12,10 +12,6 @@ public readonly struct ValueServiceDescriptorTemplate(Type serviceType, object k
 
     public IServiceAccessor CreateAccessor() => throw new NotImplementedException("You cannot create an accessor from a discriptor template. You must define a service lifetime.");
 
-    public ValueServiceDescriptorTemplate WithKey(object key) => WithId(ServiceType, key);
-
-    public ValueServiceDescriptorTemplate WithType(Type type) => WithId(type, Key);
-
     public ValueServiceDescriptorTemplate WithId(Type type, object key) => new(type, key);
 
     public static ValueServiceDescriptorTemplate FromDescriptor<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor => new(descriptor.ServiceType, descriptor.Key);

@@ -1,6 +1,5 @@
 ﻿using SDI.Abstraction;
 using SDI.Accessing.Lazy.Scoping;
-using SDI.Activating;
 using SDI.Sculptor.Descripting.Abstraction;
 using System;
 
@@ -15,10 +14,6 @@ public readonly struct LazySingletonValueServiceDescriptor(Type serviceType, obj
     public IServiceInstanceActivator Activator => activator;
 
     public IServiceAccessor CreateAccessor() => new LazySingletonServiceAccessor(ServiceId.FromDescriptor(this), Activator);
-
-    public LazySingletonValueServiceDescriptor WithKey(object key) => WithId(ServiceType, key);
-
-    public LazySingletonValueServiceDescriptor WithType(Type type) => WithId(type, Key);
 
     public LazySingletonValueServiceDescriptor WithId(Type type, object key) => new(type, key, Activator);
 

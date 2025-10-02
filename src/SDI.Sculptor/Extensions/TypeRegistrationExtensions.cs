@@ -36,4 +36,16 @@ public static class TypeRegistrationExtensions
     public static TypeRegistration<TRegistrar, ScopedValueServiceDescriptor> AsScoped<TRegistrar, TDescriptor>(this TypeRegistration<TRegistrar, TDescriptor> registration, ScriptableServiceActivator.Activator activator) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> => registration.WithDescriptor(d => d.AsScoped(activator));
 
     public static TypeRegistration<TRegistrar, TransientValueServiceDescriptor> AsTransient<TRegistrar, TDescriptor>(this TypeRegistration<TRegistrar, TDescriptor> registration, ScriptableServiceActivator.Activator activator) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> => registration.WithDescriptor(d => d.AsTransient(activator));
+
+    public static TypeRegistration<TRegistrar, LazySingletonValueServiceDescriptor> AsLazySingleton<TRegistrar, TDescriptor>(this TypeRegistration<TRegistrar, TDescriptor> registration) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> => registration.AsLazySingleton((IServiceInstanceActivator)null);
+
+    public static TypeRegistration<TRegistrar, ScopedValueServiceDescriptor> AsScoped<TRegistrar, TDescriptor>(this TypeRegistration<TRegistrar, TDescriptor> registration) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> => registration.AsScoped((IServiceInstanceActivator)null);
+
+    public static TypeRegistration<TRegistrar, TransientValueServiceDescriptor> AsTransient<TRegistrar, TDescriptor>(this TypeRegistration<TRegistrar, TDescriptor> registration) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> => registration.AsTransient((IServiceInstanceActivator)null);
+
+    public static TypeRegistration<TRegistrar, StandaloneLazySingletonValueServiceDescriptor<TImplementation>> AsStandaloneLazySingleton<TRegistrar, TDescriptor, TImplementation>(this TypeRegistration<TRegistrar, TDescriptor> registration) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> where TImplementation : class, new() => registration.WithDescriptor(d => d.AsStandaloneLazySingleton<TDescriptor, TImplementation>());
+
+    public static TypeRegistration<TRegistrar, StandaloneScopedValueServiceDescriptor<TImplementation>> AsStandaloneScoped<TRegistrar, TDescriptor, TImplementation>(this TypeRegistration<TRegistrar, TDescriptor> registration) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> where TImplementation : class, new() => registration.WithDescriptor(d => d.AsStandaloneScoped<TDescriptor, TImplementation>());
+
+    public static TypeRegistration<TRegistrar, StandaloneTransientValueServiceDescriptor<TImplementation>> AsStandaloneTransient<TRegistrar, TDescriptor, TImplementation>(this TypeRegistration<TRegistrar, TDescriptor> registration) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> where TImplementation : class, new() => registration.WithDescriptor(d => d.AsStandaloneTransient<TDescriptor, TImplementation>());
 }

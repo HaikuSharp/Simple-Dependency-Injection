@@ -15,10 +15,6 @@ public readonly struct WeakSingletonValueServiceDescriptor(Type serviceType, obj
 
     public IServiceAccessor CreateAccessor() => new WeakSingletonServiceAccessor(ServiceId.FromDescriptor(this), instance);
 
-    public WeakSingletonValueServiceDescriptor WithKey(object key) => WithId(ServiceType, key);
-
-    public WeakSingletonValueServiceDescriptor WithType(Type type) => WithId(type, Key);
-
     public WeakSingletonValueServiceDescriptor WithId(Type type, object key) => new(type, key, Instance);
 
     public WeakSingletonValueServiceDescriptor WithInstance(object instance) => new(ServiceType, Key, instance);

@@ -15,10 +15,6 @@ public readonly struct SingletonValueServiceDescriptor(Type serviceType, object 
 
     public IServiceAccessor CreateAccessor() => new SingletonServiceAccessor(ServiceId.FromDescriptor(this), instance);
 
-    public SingletonValueServiceDescriptor WithKey(object key) => WithId(ServiceType, key);
-
-    public SingletonValueServiceDescriptor WithType(Type type) => WithId(type, Key);
-
     public SingletonValueServiceDescriptor WithId(Type type, object key) => new(type, key, Instance);
 
     public SingletonValueServiceDescriptor WithInstance(object instance) => new(ServiceType, Key, instance);
