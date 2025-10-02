@@ -6,63 +6,63 @@ using System;
 namespace SDI.Reflection.Extensions;
 
 /// <summary>
-/// Provides extension methods for <see cref="IServiceController"/> to simplify registration of reflection-based services.
+/// Provides extension methods for <see cref="IServiceRegistrar"/> to simplify registration of reflection-based services.
 /// </summary>
-public static class ReflectServiceControllerExtensions
+public static class ReflectServiceRegistrarExtensions
 {
     /// <summary>
     /// Registers a scoped service with its implementation type using reflection-based activation.
     /// </summary>
     /// <typeparam name="TService">The service type to register.</typeparam>
     /// <typeparam name="TImplementation">The implementation type that derives from <typeparamref name="TService"/>.</typeparam>
-    /// <param name="controller">The service controller.</param>
+    /// <param name="registrar">The service registrar.</param>
     /// <param name="key">The optional service key.</param>
-    public static void RegisterScopedService<TService, TImplementation>(this IServiceController controller, object key) where TService : class where TImplementation : class, TService => controller.RegisterScopedService(typeof(TService), key, typeof(TImplementation));
+    public static void RegisterScopedService<TService, TImplementation>(this IServiceRegistrar registrar, object key) where TService : class where TImplementation : class, TService => registrar.RegisterScopedService(typeof(TService), key, typeof(TImplementation));
 
     /// <summary>
     /// Registers a transient service with its implementation type using reflection-based activation.
     /// </summary>
     /// <typeparam name="TService">The service type to register.</typeparam>
     /// <typeparam name="TImplementation">The implementation type that derives from <typeparamref name="TService"/>.</typeparam>
-    /// <param name="controller">The service controller.</param>
+    /// <param name="registrar">The service registrar.</param>
     /// <param name="key">The optional service key.</param>
-    public static void RegisterTransientService<TService, TImplementation>(this IServiceController controller, object key) where TService : class where TImplementation : class, TService => controller.RegisterTransientService(typeof(TService), key, typeof(TImplementation));
+    public static void RegisterTransientService<TService, TImplementation>(this IServiceRegistrar registrar, object key) where TService : class where TImplementation : class, TService => registrar.RegisterTransientService(typeof(TService), key, typeof(TImplementation));
 
     /// <summary>
     /// Registers a lazy singleton service with its implementation type using reflection-based activation.
     /// </summary>
     /// <typeparam name="TService">The service type to register.</typeparam>
     /// <typeparam name="TImplementation">The implementation type that derives from <typeparamref name="TService"/>.</typeparam>
-    /// <param name="controller">The service controller.</param>
+    /// <param name="registrar">The service registrar.</param>
     /// <param name="key">The optional service key.</param>
-    public static void RegisterLazySingletonService<TService, TImplementation>(this IServiceController controller, object key) where TService : class where TImplementation : class, TService => controller.RegisterLazySingletonService(typeof(TService), key, typeof(TImplementation));
+    public static void RegisterLazySingletonService<TService, TImplementation>(this IServiceRegistrar registrar, object key) where TService : class where TImplementation : class, TService => registrar.RegisterLazySingletonService(typeof(TService), key, typeof(TImplementation));
 
     /// <summary>
     /// Registers a scoped service with its implementation type using reflection-based activation.
     /// </summary>
-    /// <param name="controller">The service controller.</param>
+    /// <param name="registrar">The service registrar.</param>
     /// <param name="serviceType">The service type to register.</param>
     /// <param name="key">The optional service key.</param>
     /// <param name="implementationType">The implementation type that derives from <paramref name="serviceType"/>.</param>
-    public static void RegisterScopedService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new ScopedServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
+    public static void RegisterScopedService(this IServiceRegistrar registrar, Type serviceType, object key, Type implementationType) => registrar.RegisterService(new ScopedServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
 
     /// <summary>
     /// Registers a transient service with its implementation type using reflection-based activation.
     /// </summary>
-    /// <param name="controller">The service controller.</param>
+    /// <param name="registrar">The service registrar.</param>
     /// <param name="serviceType">The service type to register.</param>
     /// <param name="key">The optional service key.</param>
     /// <param name="implementationType">The implementation type that derives from <paramref name="serviceType"/>.</param>
-    public static void RegisterTransientService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new TransientServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
+    public static void RegisterTransientService(this IServiceRegistrar registrar, Type serviceType, object key, Type implementationType) => registrar.RegisterService(new TransientServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
 
     /// <summary>
     /// Registers a lazy singleton service with its implementation type using reflection-based activation.
     /// </summary>
-    /// <param name="controller">The service controller.</param>
+    /// <param name="registrar">The service registrar.</param>
     /// <param name="serviceType">The service type to register.</param>
     /// <param name="key">The optional service key.</param>
     /// <param name="implementationType">The implementation type that derives from <paramref name="serviceType"/>.</param>
-    public static void RegisterLazySingletonService(this IServiceController controller, Type serviceType, object key, Type implementationType) => controller.RegisterService(new LazySingletonServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
+    public static void RegisterLazySingletonService(this IServiceRegistrar registrar, Type serviceType, object key, Type implementationType) => registrar.RegisterService(new LazySingletonServiceDescriptor(serviceType, key, GetServiceActivator(implementationType)));
 
     /// <summary>
     /// Gets the appropriate service activator based on the implementation type.

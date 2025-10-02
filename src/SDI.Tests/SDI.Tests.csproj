@@ -17,6 +17,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SDI.Abstraction\SDI.Abstraction.csproj" />
 		<ProjectReference Include="..\SDI.Reflection\SDI.Reflection.csproj" />
+		<ProjectReference Include="..\SDI.Sculptor\SDI.Sculptor.csproj" />
 		<ProjectReference Include="..\SDI\SDI.csproj" />
 	</ItemGroup>
 

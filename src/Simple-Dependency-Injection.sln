@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36127.28
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11018.127 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDI.Abstraction", "SDI.Abstraction\SDI.Abstraction.csproj", "{576BC673-D417-4F83-9A8E-EC3F1BE1AD24}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDI.Reflection.Abstraction", "SDI.Reflection.Abstraction\SDI.Reflection.Abstraction.csproj", "{2DC3796D-FF05-4135-B763-CA4F512DFA57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDI.Configuration", "SDI.Configuration\SDI.Configuration.csproj", "{3B792570-F382-4216-81AA-67C4380BF60F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDI.Sculptor", "SDI.Sculptor\SDI.Sculptor.csproj", "{0F6F5CD1-B896-4747-986D-38B841CC110A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{3B792570-F382-4216-81AA-67C4380BF60F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B792570-F382-4216-81AA-67C4380BF60F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B792570-F382-4216-81AA-67C4380BF60F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F6F5CD1-B896-4747-986D-38B841CC110A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6F5CD1-B896-4747-986D-38B841CC110A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6F5CD1-B896-4747-986D-38B841CC110A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6F5CD1-B896-4747-986D-38B841CC110A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
