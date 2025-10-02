@@ -179,7 +179,7 @@ public static class ServiceDescriptorExtensions
     /// <typeparam name="TImplementation">The implementation type with parameterless constructor.</typeparam>
     /// <param name="descriptor">The source descriptor.</param>
     /// <returns>A standalone lazy singleton descriptor with the same type and key.</returns>
-    public static StandaloneLazySingletonValueServiceDescriptor<TImplementation> AsStandaloneLazySingleton<TDescriptor, TImplementation>(this TDescriptor descriptor) where TDescriptor : IServiceDescriptor where TImplementation : class, new() => new(descriptor.ServiceType, descriptor.Key);
+    public static LazySingletonValueServiceDescriptor AsStandaloneLazySingleton<TDescriptor, TImplementation>(this TDescriptor descriptor) where TDescriptor : IServiceDescriptor where TImplementation : class, new() => new(descriptor.ServiceType, descriptor.Key, StandaloneServiceActivator<TImplementation>.Default);
 
     /// <summary>
     /// Converts a descriptor to a standalone transient descriptor.
@@ -188,7 +188,7 @@ public static class ServiceDescriptorExtensions
     /// <typeparam name="TImplementation">The implementation type with parameterless constructor.</typeparam>
     /// <param name="descriptor">The source descriptor.</param>
     /// <returns>A standalone transient descriptor with the same type and key.</returns>
-    public static StandaloneTransientValueServiceDescriptor<TImplementation> AsStandaloneTransient<TDescriptor, TImplementation>(this TDescriptor descriptor) where TDescriptor : IServiceDescriptor where TImplementation : class, new() => new(descriptor.ServiceType, descriptor.Key);
+    public static TransientValueServiceDescriptor AsStandaloneTransient<TDescriptor, TImplementation>(this TDescriptor descriptor) where TDescriptor : IServiceDescriptor where TImplementation : class, new() => new(descriptor.ServiceType, descriptor.Key, StandaloneServiceActivator<TImplementation>.Default);
 
     /// <summary>
     /// Converts a descriptor to a standalone scoped descriptor.
@@ -197,5 +197,5 @@ public static class ServiceDescriptorExtensions
     /// <typeparam name="TImplementation">The implementation type with parameterless constructor.</typeparam>
     /// <param name="descriptor">The source descriptor.</param>
     /// <returns>A standalone scoped descriptor with the same type and key.</returns>
-    public static StandaloneScopedValueServiceDescriptor<TImplementation> AsStandaloneScoped<TDescriptor, TImplementation>(this TDescriptor descriptor) where TDescriptor : IServiceDescriptor where TImplementation : class, new() => new(descriptor.ServiceType, descriptor.Key);
+    public static ScopedValueServiceDescriptor AsStandaloneScoped<TDescriptor, TImplementation>(this TDescriptor descriptor) where TDescriptor : IServiceDescriptor where TImplementation : class, new() => new(descriptor.ServiceType, descriptor.Key, StandaloneServiceActivator<TImplementation>.Default);
 }
