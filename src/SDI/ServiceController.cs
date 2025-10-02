@@ -164,15 +164,15 @@ public class ServiceController : IServiceController
 
         private ServiceController Controller => m_WeakController.TryGetTarget(out var controller) ? controller : throw new ObjectDisposedException(nameof(controller), "Operation unavailable. The specified Controller has been disposed.");
 
-        public bool IsImplemented(ServiceId id) => Controller().IsRegistered(id);
+        public bool IsImplemented(ServiceId id) => Controller.IsRegistered(id);
 
         public object GetService(Type serviceType) => GetService(ServiceId.FromType(serviceType));
 
-        public object GetService(ServiceId id) => Controller().GetService(id, this);
+        public object GetService(ServiceId id) => Controller.GetService(id, this);
 
-        public IEnumerable GetServices(ServiceId id) => Controller().GetServices(id, this);
+        public IEnumerable GetServices(ServiceId id) => Controller.GetServices(id, this);
 
-        public IServiceProvider CreateScope(ScopeId id) => InternalGetController().CreateScope(id);
+        public IServiceProvider CreateScope(ScopeId id) => Controller.CreateScope(id);
 
         public void Dispose()
         {
@@ -182,7 +182,7 @@ public class ServiceController : IServiceController
 
         internal void InternalInitialize()
         {
-            var controller = Controller();
+            var controller = Controller;
 
             if(controller is null) return;
 
@@ -197,7 +197,7 @@ public class ServiceController : IServiceController
 
         internal void InternalDeinitialize()
         {
-            var controller = Controller();
+            var controller = Controller;
             if(controller is null) return;
             var scopeId = Id;
 
