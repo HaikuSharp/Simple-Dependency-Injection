@@ -1,4 +1,6 @@
 ﻿using SDI.Abstraction;
+using System;
+using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Activating;
 
@@ -7,6 +9,8 @@ namespace SDI.Activating;
 /// </summary>
 public sealed class ScriptableServiceActivator(ScriptableServiceActivator.Activator activator) : IServiceInstanceActivator
 {
+    private readonly Activator m_Activator = activator ?? throw new ArgumentNullException(nameof(activator));
+
     /// <summary>
     /// Delegate that defines the signature for service activation functions.
     /// </summary>
@@ -16,5 +20,5 @@ public sealed class ScriptableServiceActivator(ScriptableServiceActivator.Activa
     public delegate object Activator(ServiceId requestedId, IServiceProvider provider);
 
     /// <inheritdoc/>
-    public object Activate(ServiceId requestedId, IServiceProvider provider) => activator(requestedId, provider);
+    public object Activate(ServiceId requestedId, IServiceProvider provider) => m_Activator(requestedId, provider);
 }
