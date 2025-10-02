@@ -6,7 +6,7 @@ namespace SDI.Exceptions;
 /// <summary>
 /// The exception that is thrown when attempting to access a scope that has not been created or is invalid.
 /// </summary>
-public sealed class ScopeNotCreatedExeption(ScopeId id) : Exception($"Scope with [id: {id}] not created.")
+public sealed class ScopeNotCreatedExeption(ScopeId id) : NullReferenceException($"Scope with [id: {id}] not created.")
 {
     /// <summary>
     /// Throws a <see cref="ScopeNotCreatedExeption"/> if the specified container is null.
