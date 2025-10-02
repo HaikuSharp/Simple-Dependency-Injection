@@ -17,6 +17,11 @@ public readonly struct ServiceId : IEquatable<ServiceId>
     }
 
     /// <summary>
+    /// Indicates that id contains a type.
+    /// </summary>
+    public bool HasType => !m_ServiceType.IsNull;
+
+    /// <summary>
     /// Gets a service type.
     /// </summary>
     public Type Type => m_ServiceType.m_Type;

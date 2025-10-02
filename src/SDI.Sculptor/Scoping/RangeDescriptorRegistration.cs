@@ -32,7 +32,7 @@ public readonly struct RangeDescriptorRegistration<TRegistrar, TDescriptor> wher
     /// <typeparam name="TCastDescriptor">The target descriptor type.</typeparam>
     /// <param name="selector">The function to transform each descriptor registration.</param>
     /// <returns>A new range descriptor registration with the transformed descriptors.</returns>
-    public RangeDescriptorRegistration<TRegistrar, TCastDescriptor> WithDescriptors<TCastDescriptor>(Func<DiscriptorRegistration<TRegistrar, TDescriptor>, DiscriptorRegistration<TRegistrar, TCastDescriptor>> selector) where TCastDescriptor : IValueServiceDescriptor<TCastDescriptor> => new(m_Registration, m_Registrar, m_Registractions.Select(selector));
+    public RangeDescriptorRegistration<TRegistrar, TCastDescriptor> WithDescriptors<TCastDescriptor>(Func<IEnumerable<DiscriptorRegistration<TRegistrar, TDescriptor>>, IEnumerable<DiscriptorRegistration<TRegistrar, TCastDescriptor>>> selector) where TCastDescriptor : IValueServiceDescriptor<TCastDescriptor> => new(m_Registration, m_Registrar, selector(m_Registractions));
 
     /// <summary>
     /// Completes the range registration by committing all individual descriptor registrations and returns to the parent registration session.
