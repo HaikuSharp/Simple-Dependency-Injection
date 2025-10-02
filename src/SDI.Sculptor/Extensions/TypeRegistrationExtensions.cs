@@ -23,6 +23,15 @@ public static class TypeRegistrationExtensions
     public static TypeRegistration<TRegistrar, TDescriptor> WithType<TRegistrar, TDescriptor>(this TypeRegistration<TRegistrar, TDescriptor> registration, Type type) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> => registration.WithDescriptor(d => d.WithType(type));
 
     /// <summary>
+    /// Configures the registration without the service key.
+    /// </summary>
+    /// <typeparam name="TRegistrar">The registrar type.</typeparam>
+    /// <typeparam name="TDescriptor">The descriptor type.</typeparam>
+    /// <param name="registration">The type registration.</param>
+    /// <returns>The updated type registration.</returns>
+    public static TypeRegistration<TRegistrar, TDescriptor> WithoutKey<TRegistrar, TDescriptor>(this TypeRegistration<TRegistrar, TDescriptor> registration) where TRegistrar : class, IServiceRegistrar where TDescriptor : IValueServiceDescriptor<TDescriptor> => registration.WithDescriptor(d => d.WithoutKey());
+
+    /// <summary>
     /// Configures the registration with the specified service key.
     /// </summary>
     /// <typeparam name="TRegistrar">The registrar type.</typeparam>
