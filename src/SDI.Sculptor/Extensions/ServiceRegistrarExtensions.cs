@@ -2,7 +2,6 @@
 using SDI.Sculptor.Descripting;
 using SDI.Sculptor.Descripting.Abstraction;
 using SDI.Sculptor.Scoping;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace SDI.Sculptor.Extensions;

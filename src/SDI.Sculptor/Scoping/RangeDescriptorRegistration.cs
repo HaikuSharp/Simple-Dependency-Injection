@@ -3,7 +3,6 @@ using SDI.Sculptor.Descripting.Abstraction;
 using SDI.Sculptor.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SDI.Sculptor.Scoping;
 
