@@ -1,4 +1,5 @@
-﻿using SDI.Reflection.Abstraction;
+﻿using SDI.Extensions;
+using SDI.Reflection.Abstraction;
 using SDI.Reflection.Resolving;
 
 namespace SDI.Reflection;
@@ -12,7 +13,7 @@ public class ReflectServiceController : ServiceController
     protected override void SetupDefaultServices()
     {
         base.SetupDefaultServices();
-        RegisterWeakInstance<IServiceDependencyResolver>(DEFAULT_SERVICE_KEY, ServiceDependencyResolver.Default);
-        RegisterWeakInstance<IServiceConstructorResolver>(DEFAULT_SERVICE_KEY, ServiceDefaultConstructorResolver.Default);
+        this.RegisterWeakSingletonService<IServiceDependencyResolver>(DEFAULT_SERVICE_KEY, ServiceDependencyResolver.Default);
+        this.RegisterWeakSingletonService<IServiceConstructorResolver>(DEFAULT_SERVICE_KEY, ServiceDefaultConstructorResolver.Default);
     }
 }

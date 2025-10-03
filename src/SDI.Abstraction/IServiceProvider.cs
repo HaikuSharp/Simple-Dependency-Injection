@@ -7,7 +7,7 @@ namespace SDI.Abstraction;
 /// Represents the base interface for a service provider within a specific dependency injection scope.
 /// Extends the standard <see cref="System.IServiceProvider"/> with scope-aware capabilities.
 /// </summary>
-public interface IServiceProvider : System.IServiceProvider, IScopeProvider, IDisposable
+public interface IServiceProvider : System.IServiceProvider, IDisposable
 {
     /// <summary>
     /// Gets the scope identifier that this service provider is associated with.

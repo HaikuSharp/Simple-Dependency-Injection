@@ -8,11 +8,6 @@ namespace SDI.Abstraction;
 public interface IServiceInstanceContainer : IDisposable
 {
     /// <summary>
-    /// Gets the scope identifier associated with this container.
-    /// </summary>
-    ScopeId Id { get; }
-
-    /// <summary>
     /// Determines whether an instance of the specified service exists in this container.
     /// </summary>
     /// <param name="id">The service identifier to check.</param>

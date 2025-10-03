@@ -221,4 +221,41 @@ public static class ServiceRegistererExtensions
     /// <param name="key">The optional service key.</param>
     /// <param name="instance">The service instance to register.</param>
     public static void RegisterSingletonService(this IServiceRegistrar registrar, Type serviceType, object key, object instance) => registrar.RegisterService(new SingletonServiceDescriptor(serviceType, key, instance));
+
+    /// <summary>
+    /// Unregisters a service of the specified type with no key.
+    /// </summary>
+    /// <typeparam name="TService">The type of service to unregister.</typeparam>
+    /// <param name="registrar">The service registrar.</param>
+    public static void UnregisterService<TService>(this IServiceRegistrar registrar) => registrar.UnregisterService<TService>(null);
+
+    /// <summary>
+    /// Unregisters a service of the specified type with the specified key.
+    /// </summary>
+    /// <typeparam name="TService">The type of service to unregister.</typeparam>
+    /// <param name="registrar">The service registrar.</param>
+    /// <param name="key">The key of the service to unregister.</param>
+    public static void UnregisterService<TService>(this IServiceRegistrar registrar, object key) => registrar.UnregisterService(typeof(TService), key);
+
+    /// <summary>
+    /// Unregisters a service with the specified key and no specific type.
+    /// </summary>
+    /// <param name="registrar">The service registrar.</param>
+    /// <param name="key">The key of the service to unregister.</param>
+    public static void UnregisterService(this IServiceRegistrar registrar, object key) => registrar.UnregisterService(null, key);
+
+    /// <summary>
+    /// Unregisters a service of the specified type with no key.
+    /// </summary>
+    /// <param name="registrar">The service registrar.</param>
+    /// <param name="type">The type of service to unregister.</param>
+    public static void UnregisterService(this IServiceRegistrar registrar, Type type) => registrar.UnregisterService(type, null);
+
+    /// <summary>
+    /// Unregisters a service of the specified type with the specified key.
+    /// </summary>
+    /// <param name="registrar">The service registrar.</param>
+    /// <param name="type">The type of service to unregister.</param>
+    /// <param name="key">The key of the service to unregister.</param>
+    public static void UnregisterService(this IServiceRegistrar registrar, Type type, object key) => registrar.UnregisterService(ServiceId.FromType(type, key));
 }
