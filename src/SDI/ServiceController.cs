@@ -215,23 +215,19 @@ public class ServiceController : IServiceController
 
             public object GetInstance(ServiceId id) => m_Instances.FirstOrDefault(i => id == i.Id).Instance;
 
-            public void Dispose(ServiceId id)
-            {
-                var instances = m_Instances;
-
-                for(int i = instances.Count - 1; i >= 0; i--)
-                {
-                    var serviceInstance = instances[i];
-                    if(serviceInstance.Id != id) continue;
-                    instances.RemoveAt(i);
-                    serviceInstance.Dispose();
-                }
-            }
+            public void Dispose(ServiceId id) => m_Instances.RemoveAll(i => DisposeInstanceIfNeeded(i, id));
 
             public void Dispose()
             {
                 m_Instances.ForEach(i => i.Dispose());
                 m_Instances.Clear();
+            }
+
+            private static bool DisposeInstanceIfNeeded(ServiceInstance instance, ServiceId id)
+            {
+                if(instance.Id != id) return false;
+                instance.Dispose();
+                return true;
             }
 
             private readonly struct ServiceInstance(ServiceId id, object instance) : IDisposable
