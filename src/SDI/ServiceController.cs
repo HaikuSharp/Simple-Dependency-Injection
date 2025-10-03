@@ -18,7 +18,7 @@ public class ServiceController : IServiceController
     /// Default service key used for fundamental service registrations.
     /// </summary>
     public const string DEFAULT_SERVICE_KEY = "default";
-    private readonly ServiceRegistrar m_Registrar;
+    private readonly ServiceAccessorProvider m_AccessorProvider;
     private readonly ServiceProvider m_RootScopeProvider;
 
     /// <summary>
@@ -26,7 +26,7 @@ public class ServiceController : IServiceController
     /// </summary>
     public ServiceController()
     {
-        m_Registrar = new();
+        m_AccessorProvider = new();
         m_RootScopeProvider = InternalCreateScope(Id);
     }
 
@@ -50,17 +50,17 @@ public class ServiceController : IServiceController
     }
 
     /// <inheritdoc/>
-    public bool IsRegistered(ServiceId id) => m_Registrar.IsRegistered(id);
+    public bool IsRegistered(ServiceId id) => m_AccessorProvider.IsRegistered(id);
 
     /// <inheritdoc/>
     public void RegisterService<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor
     {
         InvalidServiceIdException.ThrowIfTypeIsNull(descriptor.GetId());
-        m_Registrar.RegisterService(descriptor);
+        m_AccessorProvider.RegisterService(descriptor);
     }
 
     /// <inheritdoc/>
-    public void UnregisterService(ServiceId id) => m_Registrar.UnregisterService(id);
+    public void UnregisterService(ServiceId id) => m_AccessorProvider.UnregisterService(id);
 
     /// <inheritdoc/>
     public IServiceProvider CreateScope(ScopeId id) => m_RootScopeProvider.GetService<IServiceProvider>(id) ?? InternalCreateScope(id);
@@ -102,12 +102,12 @@ public class ServiceController : IServiceController
 
     private ServiceProvider InternalCreateScope(ScopeId id)
     {
-        ServiceProvider provider = new(id, m_Registrar);
+        ServiceProvider provider = new(id, m_AccessorProvider);
         provider.InternalInitialize();
         return provider;
     }
 
-    private sealed class ServiceRegistrar : IServiceRegistrar, IServiceAccessProvider
+    private sealed class ServiceAccessorProvider : IServiceRegistrar, IServiceAccessProvider
     {
         private readonly List<IServiceAccessor> m_Accessors = [];
 
@@ -134,22 +134,22 @@ public class ServiceController : IServiceController
         private void InternalUnregisterService(ServiceId id) => _ = m_Accessors.RemoveAll(a => a.CanAccess(id));
     }
 
-    private sealed class ServiceProvider(ScopeId scopeId, ServiceRegistrar registrar) : IServiceProvider
+    private sealed class ServiceProvider(ScopeId scopeId, ServiceAccessorProvider accessorProvider) : IServiceProvider
     {
-        private readonly WeakReference<ServiceRegistrar> m_WeakRegistrar = new(registrar);
+        private readonly WeakReference<ServiceAccessorProvider> m_WeakProvider = new(accessorProvider);
         private readonly ServiceContainer m_Container = new();
 
         public ScopeId Id => scopeId;
 
-        private ServiceRegistrar Registrar => m_WeakRegistrar.TryGetTarget(out var controller) ? controller : throw new ObjectDisposedException(nameof(controller), "Operation unavailable. The specified Controller has been disposed.");
+        private ServiceAccessorProvider Provider => m_WeakProvider.TryGetTarget(out var controller) ? controller : throw new ObjectDisposedException(nameof(controller), "Operation unavailable. The specified Controller has been disposed.");
 
-        public bool IsImplemented(ServiceId id) => Registrar.IsRegistered(id);
+        public bool IsImplemented(ServiceId id) => Provider.IsRegistered(id);
 
         public object GetService(Type serviceType) => GetService(ServiceId.FromType(serviceType));
 
-        public object GetService(ServiceId id) => Registrar.GetService(id, this);
+        public object GetService(ServiceId id) => Provider.GetService(id, this);
 
-        public IEnumerable GetServices(ServiceId id) => Registrar.GetServices(id, this);
+        public IEnumerable GetServices(ServiceId id) => Provider.GetServices(id, this);
 
         public void Dispose()
         {
@@ -159,20 +159,20 @@ public class ServiceController : IServiceController
 
         internal void InternalInitialize()
         {
-            var registrar = Registrar;
+            var provider = Provider;
             var scopeId = Id;
 
-            registrar.RegisterWeakSingletonService<IServiceInstanceContainer>(scopeId, m_Container);
-            registrar.RegisterWeakSingletonService<IServiceProvider>(scopeId, this);
+            provider.RegisterWeakSingletonService<IServiceInstanceContainer>(scopeId, m_Container);
+            provider.RegisterWeakSingletonService<IServiceProvider>(scopeId, this);
         }
 
         internal void InternalDeinitialize()
         {
-            var registrar = Registrar;
+            var provider = Provider;
             var scopeId = Id;
 
-            registrar.UnregisterService<IServiceInstanceContainer>(scopeId);
-            registrar.UnregisterService<IServiceProvider>(scopeId);
+            provider.UnregisterService<IServiceInstanceContainer>(scopeId);
+            provider.UnregisterService<IServiceProvider>(scopeId);
         }
 
         private sealed class ServiceContainer : IServiceInstanceContainer
