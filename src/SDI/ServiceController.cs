@@ -82,15 +82,8 @@ public class ServiceController : IServiceController
     /// <inheritdoc/>
     public void UnregisterService(ServiceId id)
     {
-        var accessors = m_Accessors;
-
-        for(int i = accessors.Count - 1; i >= 0; i--)
-        {
-            var accessor = accessors[i];
-            if(!accessor.CanAccess(id)) continue;
-            accessors.RemoveAt(i);
-            OnServiceUnregistered?.Invoke(id);
-        }
+        m_Accessors.RemoveAll(a => a.CanAccess(id));
+        OnServiceUnregistered?.Invoke(id);
     }
 
     /// <inheritdoc/>
