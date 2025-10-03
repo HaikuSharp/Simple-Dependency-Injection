@@ -184,9 +184,6 @@ public class ServiceController : IServiceController
         internal void InternalInitialize()
         {
             var controller = Controller;
-
-            if(controller is null) return;
-
             var scopeId = Id;
 
             controller.RegisterWeakInstance<IServiceInstanceContainer>(scopeId, m_Container);
@@ -199,7 +196,6 @@ public class ServiceController : IServiceController
         internal void InternalDeinitialize()
         {
             var controller = Controller;
-            if(controller is null) return;
             var scopeId = Id;
 
             controller.UnregisterInstance<IServiceInstanceContainer>(scopeId);
