@@ -14,7 +14,7 @@ public abstract class ScopedServiceAccessorBase(ServiceId id, IServiceInstanceAc
     protected override object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId)
     {
         var id = GetScopeId(provider);
-        var scope = ScopeNotCreatedExeption.ThrowIfNull(provider.GetScope(id), id);
+        var scope = ScopeNotCreatedExeption.ThrowIfNull(provider.GetScopeInstanceContainer(id), id);
         return scope.HasInstance(accessId) ? scope.GetInstance(accessId) : scope.Create(accessId, CreateInstance(requestedId, provider));
     }
 
