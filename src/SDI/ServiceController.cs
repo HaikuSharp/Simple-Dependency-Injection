@@ -134,7 +134,7 @@ public class ServiceController : IServiceController
         private void InternalUnregisterService(ServiceId id) => _ = m_Accessors.RemoveAll(a => a.CanAccess(id));
     }
 
-    private sealed class ServiceProvider<TSource>(ScopeId scopeId, TSource registrar) : IServiceProvider
+    private sealed class ServiceProvider(ScopeId scopeId, ServiceRegistrar registrar) : IServiceProvider
     {
         private readonly WeakReference<ServiceRegistrar> m_WeakRegistrar = new(registrar);
         private readonly ServiceContainer m_Container = new();
@@ -174,8 +174,6 @@ public class ServiceController : IServiceController
             registrar.UnregisterService<IServiceInstanceContainer>(scopeId);
             registrar.UnregisterService<IServiceProvider>(scopeId);
         }
-
-        public IServiceProvider CreateScope(ScopeId id) => throw new NotImplementedException();
 
         private sealed class ServiceContainer : IServiceInstanceContainer
         {
