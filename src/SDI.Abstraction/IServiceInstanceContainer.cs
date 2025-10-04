@@ -34,11 +34,11 @@ public interface IServiceInstanceContainer : IDisposable
     /// <returns>
     /// The created service instance (may be wrapped or modified by the container).
     /// </returns>
-    object RegisterInstance(ServiceId id, object instance);
+    object Create(ServiceId id, object instance);
 
     /// <summary>
     /// Disposes and removes a specific service instance from this container.
     /// </summary>
     /// <param name="id">The service identifier to dispose.</param>
-    void UnregisterInstance(ServiceId id);
+    void Dispose(ServiceId id);
 }
