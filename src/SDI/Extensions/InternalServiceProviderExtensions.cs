@@ -9,5 +9,5 @@ internal static class InternalServiceProviderExtensions
 
     internal static IServiceInstanceContainer GetScopeInstanceContainer(this IServiceProvider provider) => provider.GetScopeInstanceContainer(provider.Id);
 
-    internal static IServiceInstanceContainer GetScopeInstanceContainer(this IServiceProvider provider, ScopeId scopeId) => provider.GetService<IServiceInstanceContainer>(scopeId);
+    internal static IServiceInstanceContainer GetScopeInstanceContainer(this IServiceProvider provider, ScopeId scopeId) => provider.GetRequiredService<IServiceInstanceContainer>(scopeId);
 }
