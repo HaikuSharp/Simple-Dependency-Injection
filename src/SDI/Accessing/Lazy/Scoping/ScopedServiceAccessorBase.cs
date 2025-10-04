@@ -15,7 +15,7 @@ public abstract class ScopedServiceAccessorBase(ServiceId id, IServiceInstanceAc
     {
         var id = GetScopeId(provider);
         var scope = ScopeNotCreatedExeption.ThrowIfNull(provider.GetScopeInstanceContainer(id), id);
-        return scope.HasInstance(accessId) ? scope.GetInstance(accessId) : scope.Create(accessId, CreateInstance(requestedId, provider));
+        return scope.HasInstance(accessId) ? scope.GetInstance(accessId) : scope.RegisterInstance(accessId, CreateInstance(requestedId, provider));
     }
 
     /// <summary>

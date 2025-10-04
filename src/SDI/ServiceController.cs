@@ -151,11 +151,7 @@ public class ServiceController : IServiceController
 
         public IEnumerable GetServices(ServiceId id) => Provider.GetServices(id, this);
 
-        public void Dispose()
-        {
-            InternalDeinitialize();
-            m_Container.Dispose();
-        }
+        public void Dispose() => InternalDeinitialize();
 
         internal void InternalInitialize()
         {
@@ -181,41 +177,27 @@ public class ServiceController : IServiceController
 
             public bool HasInstance(ServiceId id) => m_Instances.Any(i => id == i.Id);
 
-            public object Create(ServiceId id, object instance)
+            public object RegisterInstance(ServiceId id, object instance)
             {
                 ServiceInstanceAlreadyAddedException.ThrowIfContains(this, id);
+                return InternalRegisterInstance(id, instance);
+            }
+
+            public object GetInstance(ServiceId id) => m_Instances.FirstOrDefault(i => id == i.Id).Service;
+
+            public void UnregisterInstance(ServiceId id) => _ = m_Instances.RemoveAll(i => i.Id == id);
+
+            private object InternalRegisterInstance(ServiceId id, object instance)
+            {
                 m_Instances.Add(new(id, instance));
                 return instance;
             }
 
-            public object GetInstance(ServiceId id) => m_Instances.FirstOrDefault(i => id == i.Id).Instance;
-
-            public void Dispose(ServiceId id) => m_Instances.RemoveAll(i => DisposeInstanceIfNeeded(i, id));
-
-            public void Dispose()
-            {
-                m_Instances.ForEach(i => i.Dispose());
-                m_Instances.Clear();
-            }
-
-            private static bool DisposeInstanceIfNeeded(ServiceInstance instance, ServiceId id)
-            {
-                if(instance.Id != id) return false;
-                instance.Dispose();
-                return true;
-            }
-
-            private readonly struct ServiceInstance(ServiceId id, object instance) : IDisposable
+            private readonly struct ServiceInstance(ServiceId id, object service)
             {
                 internal ServiceId Id => id;
 
-                internal object Instance => instance;
-
-                public void Dispose()
-                {
-                    if(instance is not IDisposable disposable) return;
-                    disposable.Dispose();
-                }
+                internal object Service => service;
             }
         }
     }
