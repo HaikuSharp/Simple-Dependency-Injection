@@ -1,6 +1,6 @@
 ﻿using SDI.Abstraction;
 using System;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
+using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Accessing;
 
@@ -13,5 +13,5 @@ public sealed class WeakSingletonServiceAccessor(ServiceId id, object instance) 
     private readonly WeakReference<object> m_WeakInstance = new(instance);
 
     /// <inheritdoc/>
-    protected override object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId) => m_WeakInstance.TryGetTarget(out object instanceRef) ? instanceRef : null;
+    protected override object Access(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId) => m_WeakInstance.TryGetTarget(out object instanceRef) ? instanceRef : null;
 }

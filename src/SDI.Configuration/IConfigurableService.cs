@@ -11,5 +11,5 @@ public interface IConfigurableService
     /// Configures the service instance using the specified service provider.
     /// </summary>
     /// <param name="provider">The service provider used to resolve dependencies.</param>
-    void Configure(IServiceProvider provider);
+    void Configure(IServiceScopedProvider provider);
 }

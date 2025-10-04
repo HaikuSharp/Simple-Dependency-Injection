@@ -19,5 +19,5 @@ public sealed class StandaloneServiceActivator<TService> : IServiceInstanceActiv
     /// <param name="requestedId">The service identifier.</param>
     /// <param name="provider">The service provider (not used by this activator).</param>
     /// <returns>A new instance of the service.</returns>
-    public object Activate(ServiceId requestedId, IServiceProvider provider) => new TService();
+    public object Activate(ServiceId requestedId, IServiceScopedProvider provider) => new TService();
 }

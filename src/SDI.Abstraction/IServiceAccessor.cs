@@ -21,5 +21,5 @@ public interface IServiceAccessor
     /// <param name="provider">The service provider used for dependency resolution.</param>
     /// <param name="requestedId">The service identifier to access.</param>
     /// <returns>The resolved service instance.</returns>
-    object Access(IServiceProvider provider, ServiceId requestedId);
+    object Access(IServiceScopedProvider provider, ServiceId requestedId);
 }

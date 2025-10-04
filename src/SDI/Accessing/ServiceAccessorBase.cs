@@ -1,5 +1,5 @@
 ﻿using SDI.Abstraction;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
+using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Accessing;
 
@@ -15,7 +15,7 @@ public abstract class ServiceAccessorBase(ServiceId accessId) : IServiceAccessor
     public bool CanAccess(ServiceId requestedId) => CanAccess(requestedId, accessId);
 
     /// <inheritdoc/>
-    public object Access(IServiceProvider provider, ServiceId requestedId) => Access(provider, requestedId, accessId);
+    public object Access(IServiceScopedProvider provider, ServiceId requestedId) => Access(provider, requestedId, accessId);
 
     /// <summary>
     /// Determines whether this accessor can provide the requested service.
@@ -23,7 +23,7 @@ public abstract class ServiceAccessorBase(ServiceId accessId) : IServiceAccessor
     /// <param name="provider">The service provider used for dependency resolution.</param>
     /// <param name="requestedId">The service identifier to access.</param>
     /// <param name="accessId">The service identifier being providing.</param>
-    protected abstract object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId);
+    protected abstract object Access(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId);
 
     /// <summary>
     /// Determines whether this accessor can provide the requested service.

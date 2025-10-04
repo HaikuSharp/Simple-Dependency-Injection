@@ -1,5 +1,5 @@
 ﻿using SDI.Abstraction;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
+using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Accessing;
 
@@ -9,5 +9,5 @@ namespace SDI.Accessing;
 public sealed class SingletonServiceAccessor(ServiceId id, object instance) : ServiceAccessorBase(id)
 {
     /// <inheritdoc/>
-    protected override object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId) => instance;
+    protected override object Access(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId) => instance;
 }

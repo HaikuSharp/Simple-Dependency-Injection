@@ -1,10 +1,8 @@
-﻿using Microsoft.Testing.Platform.Services;
-using SDI.Abstraction;
+﻿using SDI.Abstraction;
 using SDI.Extensions;
 using SDI.Reflection;
 using SDI.Reflection.Extensions;
 using SDI.Tests.Services;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Tests;
 
@@ -16,7 +14,7 @@ public sealed class ServiceProviderTestBase
     {
         var controller = ServiceController.Create<ReflectServiceController>();
         Register(controller);
-        Access(controller);
+        Access(controller.CreateScope());
     }
 
     private static void Register(IServiceController controller)
@@ -30,6 +28,8 @@ public sealed class ServiceProviderTestBase
 
         controller.RegisterTransientService(typeof(IServiceG<,>), "0", typeof(ServiceG0<>));
         controller.RegisterTransientService(typeof(IServiceG<,>), "1", typeof(ServiceG1<>));
+
+        controller.RegisterLazySingletonService<IServiceP, ServiceP>(ServiceController.DEFAULT_SERVICE_KEY);
     }
 
     private static void Access(IServiceProvider provider)
@@ -53,6 +53,8 @@ public sealed class ServiceProviderTestBase
         // otherwise Activator will not know which ImplementationType to use when substituting Generic arguments
         _ = provider.GetRequiredService<IServiceG<IServiceA, IServiceA>>("0");
         _ = provider.GetRequiredService<IServiceG<IServiceA, IServiceB>>("1");
+
+        Assert.IsNotNull(provider.GetRequiredService<IServiceP>().Provider);
 
         _ = provider.GetRequiredService("0");
     }

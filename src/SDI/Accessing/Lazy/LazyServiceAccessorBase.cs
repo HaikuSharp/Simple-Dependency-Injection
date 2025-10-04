@@ -1,6 +1,5 @@
 ﻿using SDI.Abstraction;
 using System;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Accessing.Lazy;
 
@@ -17,7 +16,7 @@ public abstract class LazyServiceAccessorBase(ServiceId id, IServiceInstanceActi
     /// <param name="requestedId">The service identifier being activated.</param>
     /// <param name="provider">The service provider for dependency resolution.</param>
     /// <returns>The newly created service instance.</returns>
-    protected object CreateInstance(ServiceId requestedId, IServiceProvider provider) => m_Activator.Activate(requestedId, provider);
+    protected object CreateInstance(ServiceId requestedId, IServiceScopedProvider provider) => m_Activator.Activate(requestedId, provider);
 
     /// <inheritdoc/>
     protected override bool CanAccess(ServiceId requestedId, ServiceId accessId) => base.CanAccess(requestedId, accessId) || (requestedId.IsGeneric && requestedId.IsClosedGeneric && accessId.IsGeneric && !accessId.IsClosedGeneric && requestedId.GenericDefinition == accessId);

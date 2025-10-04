@@ -1,20 +1,26 @@
 ﻿using SDI.Abstraction;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
+using System;
 
 namespace SDI.Accessing.Lazy.Scoping;
 
 /// <summary>
-/// Service accessor that maintains one service instance per provider scope.
+/// Base class for service accessors that maintain one instance per service scope.
 /// </summary>
-public sealed class ScopedServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : ScopedServiceAccessorBase(id, activator)
+public class ScopedServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : LazyServiceAccessorBase(id, activator)
 {
+    /// <inheritdoc/>
+    protected override object Access(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId)
+    {
+        var container = GetScope(provider, requestedId, accessId).Container;
+        return container.HasInstance(accessId) ? container.GetInstance(accessId) : container.Create(accessId, CreateInstance(requestedId, provider));
+    }
+
     /// <summary>
-    /// Gets the scope identifier from the current service provider.
+    /// When implemented in derived classes, gets the scope identifier for service instance management.
     /// </summary>
     /// <param name="provider">The service provider context.</param>
-    /// <returns>
-    /// The <see cref="IServiceProvider.Id"/> of the current provider,
-    /// which serves as the scope identifier for instance management.
-    /// </returns>
-    protected override ScopeId GetScopeId(IServiceProvider provider) => provider.Id;
+    /// <returns>The scope identifier that determines instance lifetime.</returns>
+    /// <param name="requestedId">The service identifier to access.</param>
+    /// <param name="accessId">The service identifier being providing.</param>
+    protected virtual IServiceScopedProvider GetScope(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId) => provider.IsRoot ? provider : throw new InvalidOperationException($"Unable to obtain scoped service ({requestedId}) from origin provider.");
 }

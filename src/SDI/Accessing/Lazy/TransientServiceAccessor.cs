@@ -1,5 +1,5 @@
 ﻿using SDI.Abstraction;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
+using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Accessing.Lazy;
 
@@ -9,5 +9,5 @@ namespace SDI.Accessing.Lazy;
 public sealed class TransientServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : LazyServiceAccessorBase(id, activator)
 {
     /// <inheritdoc/>
-    protected override object Access(IServiceProvider provider, ServiceId requestedId, ServiceId accessId) => CreateInstance(requestedId, provider);
+    protected override object Access(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId) => CreateInstance(requestedId, provider);
 }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
+using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Reflection.Activating;
 
@@ -15,7 +15,7 @@ public sealed class GenericServiceActivator(Type serviceImplementationType) : IS
     private readonly Dictionary<Type, IServiceInstanceActivator> m_Activators = [];
 
     /// <inheritdoc/>
-    public object Activate(ServiceId requestedId, IServiceProvider provider) => GetOrCreateActivator(requestedId.Type).Activate(requestedId, provider);
+    public object Activate(ServiceId requestedId, IServiceScopedProvider provider) => GetOrCreateActivator(requestedId.Type).Activate(requestedId, provider);
 
     private IServiceInstanceActivator GetOrCreateActivator(Type type)
     {

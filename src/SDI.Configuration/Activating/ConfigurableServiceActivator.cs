@@ -14,7 +14,7 @@ public sealed class ConfigurableServiceActivator<TService> : IServiceInstanceAct
     public static ConfigurableServiceActivator<TService> Default => field ??= new ConfigurableServiceActivator<TService>();
 
     /// <inheritdoc/>
-    public object Activate(ServiceId requestedId, IServiceProvider provider)
+    public object Activate(ServiceId requestedId, IServiceScopedProvider provider)
     {
         TService instance = new();
         instance.Configure(provider);

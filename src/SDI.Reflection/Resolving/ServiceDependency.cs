@@ -2,7 +2,7 @@
 using SDI.Reflection.Abstraction;
 using SDI.Reflection.Extensions;
 using System;
-using IServiceProvider = SDI.Abstraction.IServiceProvider;
+using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Reflection.Resolving;
 
@@ -15,7 +15,7 @@ public sealed class ServiceDependency(Type serviceType, object key) : IServiceDe
     public ServiceId Id => ServiceId.FromType(serviceType, key);
 
     /// <inheritdoc/>
-    public object Resolve(IServiceProvider provider)
+    public object Resolve(IServiceScopedProvider provider)
     {
         ServiceId id = ServiceId.FromType(serviceType);
         if(provider.IsImplemented(id)) return provider.GetService(id);
