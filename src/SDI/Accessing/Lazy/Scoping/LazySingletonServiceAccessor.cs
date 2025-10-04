@@ -8,5 +8,6 @@ namespace SDI.Accessing.Lazy.Scoping;
 /// </summary>
 public sealed class LazySingletonServiceAccessor(ServiceId id, IServiceInstanceActivator activator) : ScopedServiceAccessor(id, activator)
 {
+    /// <inheritdoc/>
     protected override IServiceScopedProvider GetScope(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId) => provider.IsRoot ? provider : provider.Root;
 }

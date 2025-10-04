@@ -70,14 +70,19 @@ public class ServiceController : IServiceController, IServiceAccessProvider
     /// <inheritdoc/>
     public Abstraction.IServiceProvider CreateScope() => InternalCreateScope();
 
+    /// <inheritdoc/>
     public bool IsImplemented(ServiceId id) => m_RootScopeProvider.IsImplemented(id);
 
+    /// <inheritdoc/>
     public IEnumerable GetServices(ServiceId id) => m_RootScopeProvider.GetServices(id);
 
+    /// <inheritdoc/>
     public object GetService(ServiceId id) => m_RootScopeProvider.GetService(id);
 
+    /// <inheritdoc/>
     public object GetService(Type serviceType) => m_RootScopeProvider.GetService(serviceType);
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         m_RootScopeProvider.Dispose();
