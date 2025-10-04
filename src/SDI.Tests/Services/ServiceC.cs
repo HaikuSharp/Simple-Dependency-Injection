@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SDI.Tests.Services;
+﻿namespace SDI.Tests.Services;
 
 public interface IServiceC
 {

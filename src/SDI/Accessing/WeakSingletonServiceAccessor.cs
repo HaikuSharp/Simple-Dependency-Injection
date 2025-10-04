@@ -1,6 +1,5 @@
 ﻿using SDI.Abstraction;
 using System;
-using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Accessing;
 

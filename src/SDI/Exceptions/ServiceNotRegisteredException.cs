@@ -1,5 +1,4 @@
 ﻿using SDI.Abstraction;
-
 using System;
 
 namespace SDI.Exceptions;

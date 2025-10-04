@@ -1,5 +1,4 @@
 ﻿using SDI.Abstraction;
-using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Accessing.Lazy;
 

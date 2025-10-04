@@ -18,7 +18,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
     /// </summary>
     public const string DEFAULT_SERVICE_KEY = "default";
 
-    private static ServiceId ServiceProviderId => ServiceId.From<Abstraction.IServiceProvider>(DEFAULT_SERVICE_KEY); 
+    private static ServiceId ServiceProviderId => ServiceId.From<Abstraction.IServiceProvider>(DEFAULT_SERVICE_KEY);
 
     private readonly List<IServiceAccessor> m_Accessors = [];
     private readonly ServiceScopedProvider<ServiceController> m_RootScopeProvider;
@@ -87,7 +87,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
     /// <summary>
     /// Sets up default services that should be available in all containers.
     /// </summary>
-    protected virtual void SetupDefaultServices() 
+    protected virtual void SetupDefaultServices()
     {
         this.RegisterSingletonService<IServiceController>(DEFAULT_SERVICE_KEY, this);
         this.RegisterSingletonService<IServiceRegistrar>(DEFAULT_SERVICE_KEY, this);
@@ -152,6 +152,8 @@ public class ServiceController : IServiceController, IServiceAccessProvider
         {
             var container = m_Owner;
 
+            // We prevent a cyclical call to Dispose.
+            // Because we register the current provider with the container.
             container.Remove(ServiceProviderId);
             container.Dispose();
         }
