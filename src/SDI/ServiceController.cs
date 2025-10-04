@@ -177,7 +177,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
                 return instance;
             }
 
-            public object GetInstance(ServiceId id) => m_Instances[id];
+            public object GetInstance(ServiceId id) => m_Instances[id].Instance;
 
             public void Remove(ServiceId id) => _ = m_Instances.Remove(id);
 
