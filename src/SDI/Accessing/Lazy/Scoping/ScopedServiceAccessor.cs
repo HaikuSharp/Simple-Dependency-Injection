@@ -22,5 +22,5 @@ public class ScopedServiceAccessor(ServiceId id, IServiceInstanceActivator activ
     /// <returns>The scope identifier that determines instance lifetime.</returns>
     /// <param name="requestedId">The service identifier to access.</param>
     /// <param name="accessId">The service identifier being providing.</param>
-    protected virtual IServiceScopedProvider GetScope(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId) => provider.IsRoot ? provider : throw new InvalidOperationException($"Unable to obtain scoped service ({requestedId}) from origin provider.");
+    protected virtual IServiceScopedProvider GetScope(IServiceScopedProvider provider, ServiceId requestedId, ServiceId accessId) => !provider.IsRoot ? provider : throw new InvalidOperationException($"Unable to obtain scoped service ({requestedId}) from origin provider.");
 }
