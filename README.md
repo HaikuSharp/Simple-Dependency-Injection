@@ -17,8 +17,8 @@
 ```
 
 **Detailed Steps:**
-| Step | User | Description |
-|------|------|-------------|
+|   | Step | Description |
+|---|------|-------------|
 | 1 | Registration | `controller.RegisterService()` |
 | 2 | Validation | Check if service type exists and not already registered |
 | 3 | Descripting | Create specific `IServiceDescriptor` |
@@ -42,8 +42,8 @@
 ```
 
 **Detailed Steps:**
-| Step | User | Description |
-|------|------|-------------|
+|   | Step | Description |
+|---|------|-------------|
 | 1 | Request | `provider.GetService()` |
 | 2 | Accessor Search | `ServiceContainer` searches for matching `IServiceAccessor` |
 | 3 | Instance Creation | `Access()` creates/retrieves instance |
@@ -65,8 +65,8 @@
 | Instance Storage | Each scope has its own `ServiceContainer` |
   
 **Scope Creation:**
-| Step | User | Description |
-|------|------|-------------|
+|   | Step | Description |
+|---|------|-------------|
 | 1 | Request | `controller.CreateScope()` |
 | 2 | Provider Creation | New `ServiceProvider` with reference to root |
 | 3 | Setup | New `ServiceContainer` for scope instances |
@@ -83,7 +83,7 @@
 
 **Activator Types:**
 | Activator Type | Usage | Behavior |
-|---------------|--------|----------|
+|----------------|-------|----------|
 | `StandaloneServiceActivator` | Parameterless constructors | `new TService()` |
 | `ScriptableServiceActivator` | Custom creation logic | Delegate-based activation |
 | Built-in to Accessors | Direct instantiation | Various lifetime strategies |
@@ -96,7 +96,7 @@
 ## Key Component Interactions
 
 **Core Components Relationship:**
-| ↓ | Component | Description |
+|   | Component | Description |
 |---|-----------|-------------|
 | ↓ | `ServiceController` | Manages registration | 
 | ↓ | `IServiceAccessProvider` | Resolution logic |
@@ -117,8 +117,8 @@
 ```
 
 **Cleanup Sequence:**
-| Step | User | Description |
-|------|------|-------------|
+|   | Step | Description |
+|---|------|-------------|
 | 1 | Scope Dispose | Called when scope using block exits |
 | 2 | Container Cleanup | All instances removed from container |
 | 3 | Instance Disposal | Each instance checked for `IDisposable` |
