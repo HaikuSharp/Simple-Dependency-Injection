@@ -2,7 +2,7 @@
 using SDI.Extensions;
 using SDI.Reflection.Abstraction;
 using System;
-using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
+using IServiceProvider = SDI.Abstraction.IServiceProvider;
 
 namespace SDI.Reflection.Activating;
 
@@ -20,7 +20,7 @@ public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivato
     /// <param name="requestedId">The service identifier being activated.</param>
     /// <param name="provider">The service provider for dependency resolution.</param>
     /// <returns>The newly created service instance.</returns>
-    public object Activate(ServiceId requestedId, IServiceScopedProvider provider)
+    public object Activate(ServiceId requestedId, IServiceProvider provider)
     {
         var constructor = GetConstructor(provider);
         object[] buffer = constructor.Parameters.Count is 0 ? [] : GetOrCreateArgumentsBuffer(provider, GetOrResolveDependencies(provider, constructor, requestedId));
@@ -34,9 +34,9 @@ public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivato
     /// </summary>
     /// <param name="provider">The service provider context.</param>
     /// <returns>A <see cref="IServiceConstructor"/> representing the constructor to invoke.</returns>
-    protected abstract IServiceConstructor GetConstructor(IServiceScopedProvider provider);
+    protected abstract IServiceConstructor GetConstructor(IServiceProvider provider);
 
-    private object[] GetOrCreateArgumentsBuffer(IServiceScopedProvider provider, IServiceDependency[] dependencies)
+    private object[] GetOrCreateArgumentsBuffer(IServiceProvider provider, IServiceDependency[] dependencies)
     {
         object[] buffer = m_ArgumentsBuffer ??= new object[dependencies.Length];
 
@@ -45,7 +45,7 @@ public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivato
         return buffer;
     }
 
-    private IServiceDependency[] GetOrResolveDependencies(IServiceScopedProvider provider, IServiceConstructor constructor, ServiceId requestedId)
+    private IServiceDependency[] GetOrResolveDependencies(IServiceProvider provider, IServiceConstructor constructor, ServiceId requestedId)
     {
         var dependencies = m_Dependencies;
 

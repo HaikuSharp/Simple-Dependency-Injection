@@ -1,5 +1,4 @@
 ﻿using SDI.Reflection.Abstraction;
-using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Reflection.Activating;
 
@@ -9,5 +8,5 @@ namespace SDI.Reflection.Activating;
 public sealed class ConstructorServiceActivator(IServiceConstructor constructor) : ConstructorServiceActivatorBase
 {
     /// <inheritdoc/>
-    protected override IServiceConstructor GetConstructor(IServiceScopedProvider provider) => constructor;
+    protected override IServiceConstructor GetConstructor(SDI.Abstraction.IServiceProvider provider) => constructor;
 }

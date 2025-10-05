@@ -1,7 +1,6 @@
 ﻿using SDI.Extensions;
 using SDI.Reflection.Abstraction;
 using System;
-using IServiceScopedProvider = SDI.Abstraction.IServiceScopedProvider;
 
 namespace SDI.Reflection.Activating;
 
@@ -14,5 +13,5 @@ public sealed class DefaultConstructorServiceActivator(Type serviceImplementatio
     private IServiceConstructor m_Constructor;
 
     /// <inheritdoc/>
-    protected override IServiceConstructor GetConstructor(IServiceScopedProvider provider) => m_Constructor ??= provider.GetRequiredService<IServiceConstructorResolver>().Resolve(serviceImplementationType);
+    protected override IServiceConstructor GetConstructor(SDI.Abstraction.IServiceProvider provider) => m_Constructor ??= provider.GetRequiredService<IServiceConstructorResolver>().Resolve(serviceImplementationType);
 }

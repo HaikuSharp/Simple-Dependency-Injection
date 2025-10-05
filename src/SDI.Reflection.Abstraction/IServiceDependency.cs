@@ -17,5 +17,5 @@ public interface IServiceDependency
     /// </summary>
     /// <param name="provider">The service provider to use for dependency resolution.</param>
     /// <returns>The resolved service instance.</returns>
-    object Resolve(IServiceScopedProvider provider);
+    object Resolve(IServiceProvider provider);
 }

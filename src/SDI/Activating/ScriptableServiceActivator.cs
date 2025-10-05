@@ -16,8 +16,8 @@ public sealed class ScriptableServiceActivator(ScriptableServiceActivator.Activa
     /// <param name="requestedId">The service identifier being activated.</param>
     /// <param name="provider">The service provider for dependency resolution.</param>
     /// <returns>The activated service instance.</returns>
-    public delegate object Activator(ServiceId requestedId, IServiceScopedProvider provider);
+    public delegate object Activator(ServiceId requestedId, Abstraction.IServiceProvider provider);
 
     /// <inheritdoc/>
-    public object Activate(ServiceId requestedId, IServiceScopedProvider provider) => m_Activator(requestedId, provider);
+    public object Activate(ServiceId requestedId, Abstraction.IServiceProvider provider) => m_Activator(requestedId, provider);
 }
