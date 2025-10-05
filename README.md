@@ -11,7 +11,7 @@
 
 # Service Registration Flow
 
-### 1. **Registration Process**
+### **Registration Process**
 
 ```
 [User Code] → [ServiceController] → [ServiceDescriptor] → [ServiceAccessor] → [Accessor List]
@@ -24,7 +24,7 @@
 4. **Accessor Creation**: Descriptor creates appropriate accessor
 5. **Storage**: Accessor added to controller's `m_Accessors` list
 
-### 2. **Descriptor Types & Their Accessors**
+### **Descriptor Types & Their Accessors**
 
 | Descriptor Type | Accessor Type | Lifetime Behavior |
 |----------------|---------------|------------------|
@@ -36,7 +36,7 @@
 
 ## Service Resolution Flow
 
-### 3. **Service Retrieval Process**
+### **Service Retrieval Process**
 
 ```
 [User Request] → [ServiceProvider] → [ServiceController] → [Find Accessor] → [Access Execution] → [Instance Return]
@@ -51,7 +51,7 @@
 6. **Container Storage**: Scoped services stored in scope container
 7. **Return**: Instance returned to user
 
-### 4. **Accessor Matching Logic**
+### **Accessor Matching Logic**
 
 ```
 Requested ID: ServiceId.From<IService>("key")
@@ -101,7 +101,7 @@ Accessor ID:  ServiceId.From<IService>("key")   → NO MATCH ✗
 | `ScriptableServiceActivator` | Custom creation logic | Delegate-based activation |
 | Built-in to Accessors | Direct instantiation | Various lifetime strategies |
 
-### 8. **Lazy Service Activation Flow**
+### **Lazy Service Activation Flow**
 
 ```
 [First Access] → [Lazy Accessor] → [Activator] → [Create Instance] → [Cache (if applicable)] → [Return]
