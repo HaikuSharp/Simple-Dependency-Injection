@@ -95,14 +95,14 @@
 
 ## Key Component Interactions
 
-**Core Components Relationship:**
-|   | Component | Description |
-|---|-----------|-------------|
-| ↓ | `ServiceController` | Manages registration | 
-| ↓ | `IServiceAccessProvider` | Resolution logic |
-| ↓ | `IServiceAccessProvider` | Per-service access logic |
-| ↓ | `IServiceAccessor` | Creation logic |
-|   | `ServiceContainer` | Instance storage per scope |
+**Core Components:**
+Component | Description |
+|-----------|-------------|
+| `ServiceController` | Manages registration | 
+| `IServiceAccessProvider` | Resolution logic |
+| `IServiceAccessProvider` | Per-service access logic |
+| `IServiceAccessor` | Creation logic |
+| `ServiceContainer` | Instance storage per scope |
 
 ## Memory Management
 
