@@ -11,7 +11,7 @@
 
 ## Service Registration Flow
 
-**Registration Process**
+**Registration Process:**
 ```
 [User Code] → [ServiceController] → [ServiceDescriptor] → [ServiceAccessor] → [Accessor List]
 ```
@@ -102,12 +102,7 @@
 | ↓ | `IServiceAccessProvider` | Resolution logic |
 | ↓ | `IServiceAccessProvider` | Per-service access logic |
 | ↓ | `IServiceAccessor` | Creation logic |
-| ↓ | `ServiceContainer` | Instance storage per scope |
-
-**Exception Handling Flow:**
-```
-[Operation] → [Validation] → [Exception Check] → [Error/Continue]
-```
+|   | `ServiceContainer` | Instance storage per scope |
 
 ## Memory Management
 
