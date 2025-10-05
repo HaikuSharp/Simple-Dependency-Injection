@@ -16,7 +16,7 @@ public static class RequiredServiceProviderExtension
     /// <typeparam name="T">The type of service object to get.</typeparam>
     /// <param name="provider">The service provider.</param>
     /// <returns>The requested service instance.</returns>
-    /// <exception cref="ServiceNotImplementedException">
+    /// <exception cref="InvalidServiceIdException">
     /// Thrown when the service is not registered in the provider.
     /// </exception>
     /// <exception cref="ServiceAccessException">
@@ -34,7 +34,7 @@ public static class RequiredServiceProviderExtension
     /// <param name="provider">The service provider.</param>
     /// <param name="key">The key that identifies the service instance.</param>
     /// <returns>The requested service instance.</returns>
-    /// <exception cref="ServiceNotImplementedException">
+    /// <exception cref="InvalidServiceIdException">
     /// Thrown when the service is not registered in the provider.
     /// </exception>
     /// <exception cref="ServiceAccessException">
@@ -51,7 +51,7 @@ public static class RequiredServiceProviderExtension
     /// <param name="provider">The service provider.</param>
     /// <param name="type">The type of service object to get.</param>
     /// <returns>The requested service instance.</returns>
-    /// <exception cref="ServiceNotImplementedException">
+    /// <exception cref="InvalidServiceIdException">
     /// Thrown when the service is not registered in the provider.
     /// </exception>
     /// <exception cref="ServiceAccessException">
@@ -65,7 +65,7 @@ public static class RequiredServiceProviderExtension
     /// <param name="provider">The service provider.</param>
     /// <param name="key">The key that identifies the service instance.</param>
     /// <returns>The requested service instance.</returns>
-    /// <exception cref="ServiceNotImplementedException">
+    /// <exception cref="InvalidServiceIdException">
     /// Thrown when the service is not registered in the provider.
     /// </exception>
     /// <exception cref="ServiceAccessException">
@@ -80,7 +80,7 @@ public static class RequiredServiceProviderExtension
     /// <param name="type">The type of service object to get.</param>
     /// <param name="key">The key that identifies the service instance.</param>
     /// <returns>The requested service instance.</returns>
-    /// <exception cref="ServiceNotImplementedException">
+    /// <exception cref="InvalidServiceIdException">
     /// Thrown when the service is not registered in the provider.
     /// </exception>
     /// <exception cref="ServiceAccessException">
@@ -94,7 +94,7 @@ public static class RequiredServiceProviderExtension
     /// <param name="provider">The service provider.</param>
     /// <param name="id">The service identifier.</param>
     /// <returns>The requested service instance.</returns>
-    /// <exception cref="ServiceNotImplementedException">
+    /// <exception cref="InvalidServiceIdException">
     /// Thrown when the service is not registered in the provider.
     /// </exception>
     /// <exception cref="ServiceAccessException">
@@ -102,11 +102,9 @@ public static class RequiredServiceProviderExtension
     /// </exception>
     public static object GetRequiredService(this IServiceProvider provider, ServiceId id)
     {
-        ServiceNotImplementedException.ThrowIfNotImplemented(provider, id);
-        object instance = provider.GetService(id);
-        ServiceAccessException.ThrowIfServiceInstanceIsNull(id, instance);
-        return instance;
+        InvalidServiceIdException.ThrowIfNotImplemented(provider, id);
+        return ServiceAccessException.ThrowIfServiceInstanceIsNull(id, provider.GetService(id));
     }
 
-    private static T ServiceCast<T>(this object service) where T : class => service is T tservice ? tservice : throw new InvalidCastException($"The service type ({service.GetType().FullName}) does not match the requested one ({typeof(T).FullName}).");
+    private static T ServiceCast<T>(this object service) where T : class => ServiceAccessException.ThrowIfCastIsNotValid<object, T>(service);
 }

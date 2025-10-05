@@ -17,5 +17,5 @@ public sealed class ServiceDefaultConstructorResolver : IServiceConstructorResol
     public static ServiceDefaultConstructorResolver Default => field ??= new();
 
     /// <inheritdoc/>
-    public IServiceConstructor Resolve(Type serviceImplementationType) => new ServiceConstructor(DefaultServiceConstructorNotFoundException.ThrowIfNull(serviceImplementationType.GetConstructors().OrderBy(c => c.GetParameters().Length).FirstOrDefault(), serviceImplementationType));
+    public IServiceConstructor Resolve(Type serviceImplementationType) => new ServiceConstructor(InvalidServiceConstructor.ThrowIfNull(serviceImplementationType.GetConstructors().OrderBy(c => c.GetParameters().Length).FirstOrDefault(), serviceImplementationType));
 }

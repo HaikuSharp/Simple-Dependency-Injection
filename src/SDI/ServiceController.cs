@@ -55,7 +55,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
         var id = descriptor.GetId();
 
         InvalidServiceIdException.ThrowIfTypeIsNull(id);
-        ServiceAlreadyRegisteredException.ThrowIfRegistered(this, id);
+        InvalidServiceIdException.ThrowIfRegistered(this, id);
 
         InternalRegisterService(descriptor);
     }
@@ -63,7 +63,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
     /// <inheritdoc/>
     public void UnregisterService(ServiceId id)
     {
-        ServiceNotRegisteredException.ThrowIfNotRegistered(this, id);
+        InvalidServiceIdException.ThrowIfNotRegistered(this, id);
         InternalUnregisterService(id);
     }
 
@@ -177,7 +177,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
 
             public object Create(ServiceId id, object instance)
             {
-                ServiceInstanceAlreadyAddedException.ThrowIfContains(this, id);
+                InvalidServiceIdException.ThrowIfContains(this, id);
                 m_Instances.Add(id, new(id, instance));
                 return instance;
             }
