@@ -98,11 +98,12 @@
 **Core Components:**
 Component | Description |
 |-----------|-------------|
-| `ServiceController` | Manages registration | 
-| `IServiceAccessProvider` | Resolution logic |
-| `IServiceAccessProvider` | Per-service access logic |
-| `IServiceAccessor` | Creation logic |
-| `ServiceContainer` | Instance storage per scope |
+| `IServiceRegistrar` | Manages registration | 
+| `IServiceDescriptor` | Contains the logic for creating an `IServiceAccessor` |
+| `IServiceAccessor` | Contains the logic for retrieving the service |
+| `IServiceInstanceActivator` | Contains the logic for creating a service instance. Used for lazy implementations. |
+| `IServiceProvider` | Current service scope |
+| `IServiceContainer` | Instance storage per scope |
 
 ## Memory Management
 
