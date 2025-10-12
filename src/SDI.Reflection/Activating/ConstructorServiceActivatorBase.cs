@@ -1,5 +1,4 @@
 ﻿using SDI.Abstraction;
-using SDI.Extensions;
 using SDI.Reflection.Abstraction;
 using System;
 using IServiceProvider = SDI.Abstraction.IServiceProvider;
@@ -9,7 +8,7 @@ namespace SDI.Reflection.Activating;
 /// <summary>
 /// Base class for service activators that use constructor injection to create service instances.
 /// </summary>
-public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivator
+public abstract class ConstructorServiceActivatorBase(IServiceDependencyResolver resolver) : IServiceInstanceActivator
 {
     private IServiceDependency[] m_Dependencies;
     private object[] m_ArgumentsBuffer;
@@ -51,13 +50,12 @@ public abstract class ConstructorServiceActivatorBase : IServiceInstanceActivato
 
         if(dependencies is not null) return dependencies;
 
-        var dependencyResolver = provider.GetRequiredService<IServiceDependencyResolver>();
         var parameters = constructor.Parameters;
         dependencies = m_Dependencies = new IServiceDependency[parameters.Count];
 
         for(int i = 0; i < dependencies.Length; i++)
         {
-            var dependency = dependencyResolver.Resolve(ServiceDependencyInfo.FromParameter(parameters[i]));
+            var dependency = resolver.Resolve(ServiceDependencyInfo.FromParameter(parameters[i]));
             var dependencyId = dependency.Id;
             if(dependencyId == requestedId) throw new InvalidOperationException($"A service [id: {requestedId}] cannot have itself as a dependency [id: {dependencyId}].");
             dependencies[i] = dependency;

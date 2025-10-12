@@ -12,7 +12,7 @@ public sealed class ServiceProviderTestBase
     [TestMethod]
     public void DoAccessTest()
     {
-        var controller = ServiceController.Create<ReflectServiceController>();
+        var controller = ServiceController.Create<ServiceController>();
         Register(controller);
         Access(controller.CreateScope());
     }

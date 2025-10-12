@@ -1,6 +1,7 @@
 ﻿using SDI.Abstraction;
 using SDI.Descripting.Lazy;
 using SDI.Reflection.Activating;
+using SDI.Reflection.Resolving;
 using System;
 
 namespace SDI.Reflection.Extensions;
@@ -72,5 +73,5 @@ public static class ReflectServiceRegistrarExtensions
     /// A <see cref="GenericServiceActivator"/> for open generic types,
     /// or a <see cref="DefaultConstructorServiceActivator"/> for concrete types.
     /// </returns>
-    private static IServiceInstanceActivator GetServiceActivator(Type serviceImplementationType) => serviceImplementationType.IsGenericType && serviceImplementationType.ContainsGenericParameters ? new GenericServiceActivator(serviceImplementationType) : new DefaultConstructorServiceActivator(serviceImplementationType);
+    private static IServiceInstanceActivator GetServiceActivator(Type serviceImplementationType) => serviceImplementationType.IsGenericType && serviceImplementationType.ContainsGenericParameters ? new GenericServiceActivator(serviceImplementationType, ServiceDefaultConstructorResolver.Default, ServiceDependencyResolver.Default) : new DefaultConstructorServiceActivator(serviceImplementationType, ServiceDefaultConstructorResolver.Default, ServiceDependencyResolver.Default);
 }
