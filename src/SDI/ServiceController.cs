@@ -18,8 +18,6 @@ public class ServiceController : IServiceController, IServiceAccessProvider
     /// </summary>
     public const string DEFAULT_SERVICE_KEY = "default";
 
-    private static ServiceId ServiceProviderId => ServiceId.From<Abstraction.IServiceProvider>(DEFAULT_SERVICE_KEY);
-
     private readonly List<IServiceAccessor> m_Accessors = [];
     private readonly ServiceScopedProvider<ServiceController> m_RootScopeProvider;
 
@@ -111,7 +109,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
 
     private ServiceScopedProvider<ServiceController> InternalCreateScope() => InternalCreateScope(m_RootScopeProvider);
 
-    private ServiceScopedProvider<ServiceController> InternalCreateScope(IServiceScopedProvider root) => new ServiceScopedProvider<ServiceController>(this, root).RegisterProviderInOwner();
+    private ServiceScopedProvider<ServiceController> InternalCreateScope(IServiceScopedProvider root) => new(this, root);
 
     private void InternalRegisterService<TDescriptor>(TDescriptor descriptor) where TDescriptor : IServiceDescriptor => InternalRegisterAccessor(descriptor.CreateAccessor());
 
@@ -125,9 +123,11 @@ public class ServiceController : IServiceController, IServiceAccessProvider
 
     private sealed class SelfServiceAccessor : IServiceAccessor
     {
+        private static ServiceId ServiceProviderId => ServiceId.From<Abstraction.IServiceProvider>(DEFAULT_SERVICE_KEY);
+
         public bool CanAccess(ServiceId requestedId) => requestedId == ServiceProviderId;
 
-        public object Access(IServiceScopedProvider provider, ServiceId requestedId) => provider.Container.GetInstance(ServiceProviderId);
+        public object Access(IServiceScopedProvider provider, ServiceId requestedId) => provider;
     }
 
     private sealed class ServiceScopedProvider<TOwner>(TOwner owner, IServiceScopedProvider root) : IServiceScopedProvider where TOwner : class, IServiceController, IServiceAccessProvider
@@ -153,21 +153,7 @@ public class ServiceController : IServiceController, IServiceAccessProvider
 
         public Abstraction.IServiceProvider CreateScope() => m_Controller.CreateScope();
 
-        public void Dispose()
-        {
-            var container = m_Owner;
-
-            // We prevent a cyclical call to Dispose.
-            // Because we register the current provider with the container.
-            container.Remove(ServiceProviderId);
-            container.Dispose();
-        }
-
-        internal ServiceScopedProvider<TOwner> RegisterProviderInOwner()
-        {
-            _ = m_Owner.Create(ServiceProviderId, this);
-            return this;
-        }
+        public void Dispose() => m_Owner.Dispose();
 
         private sealed class ServiceContainer : IServiceInstanceContainer
         {
